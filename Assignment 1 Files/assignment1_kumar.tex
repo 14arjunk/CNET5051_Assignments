@@ -91,12 +91,12 @@
 \renewcommand{\thesection}{Question \arabic{section}}
 \renewcommand{\contentsname}{Table of Contents}
 \renewcommand{\theequation}{\arabic{equation}}
-%\usepackage[backend=biber,
-%style=mla,dashed=false]{biblatex}
-%\addbibresource{bib.bib}
-%\defbibheading{bibliography}[\bibname]{%
-%  \section*{\centering#1}%
-%}
+\usepackage[backend=biber,
+style=verbose,dashed=false]{biblatex}
+\addbibresource{bib.bib}
+\defbibheading{bibliography}[\bibname]{%
+  \section*{\centering#1}%
+}
 \newcommand{\Ang}[1]{\left\langle #1 \right\rangle}
 \urldef{\repourl}\url{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Assignment%201%20Files}
 
@@ -185,7 +185,7 @@ There are many ways to measure a node's centrality in a network. Pick one centra
 Download a network dataset from \url{https://networkrepository.com/} with between $1{,}000 < N < 20{,}000$ nodes, and explore it as described below.
 
 \begin{enumerate}[label=(\alph*)]
-    \item In 2--5 sentences, describe your network. What are the nodes, what are the links, what domain is it from? Be sure to include appropriate citation(s) to the original dataset or research paper, if relevant.
+    \item In 2--5 sentences, describe your network. What are the nodes, what are the links, what domain is it from? Be sure to include appropriate citation(s) to the original dataset or research paper, if relevant. \footcite{nr-aaai15}
 
     \item Compare your network's properties to those of a randomized network, by selecting a network null model to compare against. Your null model should preserve the degree distribution of the network, so randomize your network using e.g.\ a configuration model or degree-preserving network rewiring (see Class 4).
     \begin{enumerate}[label=\roman*.]
