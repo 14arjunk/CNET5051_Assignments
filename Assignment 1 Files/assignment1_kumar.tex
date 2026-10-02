@@ -49,7 +49,7 @@
 \newcommand{\nc}[1]{(#1)}
 \setlist[enumerate,1]{label=\nc{\alph*}}
 \setlist[enumerate,2]{label=\nc{\roman*}}
-\setlist[enumerate,3]{label=\nc{\arabic*}}
+\setlist[enumerate,3]{label=\nc{\roman*}}
 \setlist[enumerate,4]{label=\nc{\arabic*}}
 \newcommand{\Space}{\text{ }}
 \renewcommand{\labelitemi}{\textendash} 
@@ -118,8 +118,36 @@ Public repo \href{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Ass
 \textit{There are a lot of ways to store network data. Each format generally has advantages and disadvantages that make them suited to particular types of situations. Let’s explore the differences between storing network data in a }\texttt{.csv}, \texttt{pickle}\textit{, or} \texttt{.gml}\textit{ file, and in Elasticsearch, which is commonly used for graph database applications. For your research, look at the documentation for each approach, seek out StackOverflow threads, and consider consulting the Bagrow \& Ahn textbook.}
 \begin{enumerate}
     \item \textit{What are the advantages of each storage approach?}
+    \begin{enumerate}
+        \item[] \texttt{.csv}:
+        \begin{enumerate}
+            \item Simplest format, just an edgelist with edge attributes if necessary. 
+            \item Space efficient, for sparse networks, $M\ll N^2$.
+            \item Widely supported and compatible. 
+            \item For small networks, easiest way to see entire structure at once, especially in a human readable format. 
+        \end{enumerate}
+        \item[] \texttt{pickle}\footcite{python-pickle,alden-pickles}
+        \begin{enumerate}
+            \item d
+        \end{enumerate}
+    \end{enumerate}
     \item \textit{What are the disadvantages of each storage approach?}
+    \begin{enumerate}
+        \item[] \texttt{.csv}:
+        \begin{enumerate}
+            \item Edges are not naturally directed. This can be overcome by listing both $(i,j)\AND (j,i)$ in the edgelist, but can be clunky and is easily mistaken for a digraph with all edge directions reversed. 
+            \item Ensure node/edge attributes do not themselves contain commas; Bagrow \& Ahn call this ``delimiter collision".\footcite{bagrow_working_2024}
+            \item With a densely connected graph, the edgelist yields $M\sim N^2$, which is not much more space efficient than the adjacency matrix itself. 
+            \item Separate files may be required for edge and node attributes. 
+        \end{enumerate}
+        \texttt{pickle}\footcite{python-pickle,alden-pickles}
+        \begin{enumerate}
+            \item The very first item on both the python docs and the LWN article is the fact that unpickling an unknown object is a risk. More on this in Q1.c.
+        \end{enumerate}
+    \end{enumerate}
     \item \textit{At least one of these storage approaches poses a non-trivial security risk. Which one(s) should we worry about, and what is the security risk? Please explain this as simply as possible.}
+    \response
+    As detailed in the LWN piece,\footcite{alden-pickles} it is easy for a malicious actor to include code within a pickle that will automatically run during the unpickling process. This is obviously a security vulnerability. As this format is frequently used to share ML models between researchers, alternatives and improved detection are being developed. 
     \item \textit{For each storage approach, think of a scenario where that storage approach would be an optimal choice. Explain your reasoning.}
 \end{enumerate}
 \clearpage
