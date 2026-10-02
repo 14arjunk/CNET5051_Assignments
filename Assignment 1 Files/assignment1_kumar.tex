@@ -1,0 +1,210 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{mathdots}
+\usepackage{suppose}
+%\usepackage{venndiagram}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, decorations.markings, positioning}
+\usepackage{geometry}
+%\usepackage[table,dvipsnames]{xcolor}
+%\definecolor{LightGray}{gray}{0.9}
+%\usepackage{multicol}
+%\usepackage{color}
+%\setlength{\columnseprule}{1pt}
+%\def\columnseprulecolor{\color{black}}
+\newcommand{\Or}{\text{ or }}
+\newcommand{\AND}{\text{ and }}
+\newcommand{\Say}{\text{Say }}
+\newcommand{\Let}{\text{Let }}
+\newcommand{\For}{\text{ for }}
+\newcommand{\Forall}{\text{ for all }}
+\newcommand{\On}{\text{ on }}
+\newcommand{\Take}{\text{Take }}
+\newcommand{\From}{\text{From }}
+\newcommand{\Where}{\text{ where }}
+\newcommand{\Note}{\textbf{Note: }}
+\newcommand{\pl}{\left(}
+\newcommand{\pr}{\right)}
+\newcommand{\bl}{\left[}
+\newcommand{\br}{\right]}
+\newcommand{\Cl}{\left\{}
+\newcommand{\Cr}{\right\}}
+\newcommand{\mb}{\mathbb}
+\newcommand{\mc}{\mathcal}
+\newcommand{\Span}{\text{span}}
+\newcommand{\Range}{\text{range}}
+\newcommand{\Null}{\text{null}}
+\newcommand{\Sin}[1]{\sin(#1)}
+\newcommand{\Cos}[1]{\cos(#1)}
+\newcommand{\response}{\subsubsection*{Response}}
+\newcommand{\note}{\textbf{Note:\text{ }}}
+\newcommand{\contra}{$\rightarrow\leftarrow$}
+\newcommand{\resetal}{\setcounter{equation}{0}}
+\usepackage{enumitem}
+\newcommand{\nc}[1]{(#1)}
+\setlist[enumerate,1]{label=\nc{\alph*}}
+\setlist[enumerate,2]{label=\nc{\roman*}}
+\setlist[enumerate,3]{label=\nc{\arabic*}}
+\setlist[enumerate,4]{label=\nc{\arabic*}}
+\newcommand{\Space}{\text{ }}
+\renewcommand{\labelitemi}{\textendash} 
+\renewcommand{\labelitemii}{\textasteriskcentered} 
+\renewcommand{\labelitemiii}{\textbullet} 
+\renewcommand{\labelitemiv}{\textperiodcentered} 
+%\usepackage{pgfplots}
+%\pgfplotsset{compat=1.18}
+%\usepackage{etoolbox}
+%\usepackage{colortbl}
+\usepackage{setspace}
+\usepackage[indent=0.25in]{parskip}
+\usepackage{bm}
+\usepackage{nicematrix}
+\usepackage{dirtytalk}
+\usepackage{pdfpages}
+\usepackage{logicproof}
+\usepackage{etoolbox}
+\usepackage{arydshln}
+\makeatletter
+\renewcommand{\lp@start@proof@line}{%
+  \stepcounter{lp@line}%
+  (\arabic{lp@line})%  
+  &%
+  \lp@continue@proof@line%
+}
+\makeatother
+\usepackage{hyperref} 
+\hypersetup{
+      colorlinks=true,
+      linkcolor=blue,
+      citecolor=blue,
+      urlcolor=blue
+    }
+\usepackage{mathrsfs}
+\usepackage{algpseudocode}
+%\newcommand{\Lapl}{\mathscr{L}}
+%\newcommand{\iLapl}{\mathscr{L}^{-1}}
+\renewcommand{\thesection}{Question \arabic{section}}
+\renewcommand{\contentsname}{Table of Contents}
+\renewcommand{\theequation}{\arabic{equation}}
+%\usepackage[backend=biber,
+%style=mla,dashed=false]{biblatex}
+%\addbibresource{bib.bib}
+%\defbibheading{bibliography}[\bibname]{%
+%  \section*{\centering#1}%
+%}
+\newcommand{\Ang}[1]{\left\langle #1 \right\rangle}
+\urldef{\repourl}\url{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Assignment%201%20Files}
+
+
+
+\title{\textbf{Assignment 1}}
+\author{Arjun G. Kumar\\
+CNET 5051\\
+Northeastern University}
+\date{2 October 2026}
+
+\begin{document}
+\maketitle
+\section*{Question 0}
+\textit{Include your code in a (well-documented, commented, clear) }\texttt{assignment01.ipynb}\textit{ file. Scores for the code-based questions below will be based on your written responses and code.}
+\response
+Public repo \href{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Assignment%201%20Files}{here.}\footnote{\repourl}
+\section{}
+There are a lot of ways to store network data. Each format generally has advantages and disadvantages that make them suited to particular types of situations. Let’s explore the differences between storing network data in a \texttt{.csv}, \texttt{pickle}, or \texttt{.gml} file, and in Elasticsearch, which is commonly used for graph database applications. For your research, look at the documentation for each approach, seek out StackOverflow threads, and consider consulting the Bagrow \& Ahn textbook.
+\begin{enumerate}
+    \item What are the advantages of each storage approach?
+    \item What are the disadvantages of each storage approach?
+    \item At least one of these storage approaches poses a non-trivial security risk. Which one(s) should we worry about, and what is the security risk? Please explain this as simply as possible.
+    \item For each storage approach, think of a scenario where that storage approach would be an optimal choice. Explain your reasoning.
+\end{enumerate}
+\clearpage
+\section{}
+
+Algorithm 11.1 in Bagrow \& Ahn, the basic edge exchange algorithm, modifies a graph in place to produce a null model while preserving the degree distribution. It does so by picking two edges at random and swapping their endpoints.
+
+\begin{algorithmic}[1]
+\Procedure{EDGE\_EXCHANGE}{$G, t$}
+    \State $s \gets 0$
+    \While{$s < t$}
+        \State $(i, j) \gets$ \texttt{get\_random\_edge}$(G)$
+        \State $(u, v) \gets$ \texttt{get\_random\_edge}$(G)$
+        \If{$i = u$ \textbf{or} $i = v$ \textbf{or} $j = u$ \textbf{or} $j = v$}
+            \State \textbf{continue}
+        \EndIf
+        \If{\texttt{has\_edge}$(G, i, v)$ \textbf{or} \texttt{has\_edge}$(G, j, u)$}
+            \State \textbf{continue}
+        \EndIf
+        \State \texttt{remove\_edge}$(G, i, j)$
+        \State \texttt{remove\_edge}$(G, u, v)$
+        \State \texttt{add\_edge}$(G, i, v)$
+        \State \texttt{add\_edge}$(G, j, u)$
+        \State $s \gets s + 1$
+    \EndWhile
+    \State \Return $G$
+\EndProcedure
+\end{algorithmic}
+
+\begin{enumerate}[label=(\alph*)]
+    \item (Bagrow \& Ahn Question 11.2) The basic edge exchange algorithm (as shown above) will enter an infinite loop and never end if no allowable exchanges are present. Describe a scenario where you will never be able to find an allowable edge exchange according to this algorithm.
+
+    \item (Bagrow \& Ahn Question 11.3) Modify the algorithm to prevent an infinite loop by abandoning the exchange process after reaching a given number of attempts without a successful exchange.
+
+    \item (Bagrow \& Ahn Question 11.4) Modify the algorithm to preserve not only the degrees of every node but also the overall connectivity of the network. How does this additional constraint make edge exchange more difficult?
+
+    \item (Bagrow \& Ahn Question 11.5) Suppose your network has a binary attribute $x_i \in \{-1, 1\}$ associated with every node $i$. Modify the algorithm to preserve the correlation on edges of $x$. This means that any new edge $(a, b)$ inserted in place of an existing edge $(i, j)$ must have the same attributes $(x_i, x_j) = (x_a, x_b)$. How might this additional constraint make edge exchange more difficult?
+\end{enumerate}
+\clearpage
+\section{}
+
+There are many ways to measure a node's centrality in a network. Pick one centrality measure out of \{betweenness centrality, harmonic centrality, percolation centrality\} and do the following:
+
+\begin{enumerate}[label=(\alph*)]
+    \item Write your own function to compute a single node's centrality in a graph. This function should take a \texttt{networkx} graph and one node in the graph as input. As output, it should return a float or integer representing the node's centrality in the graph according to one of the centrality measures listed above.
+
+    \item Augment your function with error handling. It should be able to return useful messages when given any of the following:
+    \begin{enumerate}[label=\roman*.]
+        \item A node that is not in the graph
+        \item A graph that is not a \texttt{networkx} object
+        \item A graph with no connectivity (or not enough connectivity to produce a valid centrality result)
+        \item Any situation that might produce numerical difficulties (e.g.\ dividing by zero) for your chosen centrality measure
+    \end{enumerate}
+
+    \item Compare your function to the corresponding \texttt{networkx} function across several graphs you design as test inputs, including one with no connectivity. Does your function ever return different results from the \texttt{networkx} function? Why do you think this is the case?
+
+    \item Putting it all together: Write a function that takes a centrality function as input and tests the function for robustness to edge cases (like a graph with no connectivity) and correctness of outputs. Explain why you selected the test cases you chose.
+\end{enumerate}
+\clearpage
+
+\section{}
+
+Download a network dataset from \url{https://networkrepository.com/} with between $1{,}000 < N < 20{,}000$ nodes, and explore it as described below.
+
+\begin{enumerate}[label=(\alph*)]
+    \item In 2--5 sentences, describe your network. What are the nodes, what are the links, what domain is it from? Be sure to include appropriate citation(s) to the original dataset or research paper, if relevant.
+
+    \item Compare your network's properties to those of a randomized network, by selecting a network null model to compare against. Your null model should preserve the degree distribution of the network, so randomize your network using e.g.\ a configuration model or degree-preserving network rewiring (see Class 4).
+    \begin{enumerate}[label=\roman*.]
+        \item Create a figure with three subplots, corresponding to three distributions of your network; write brief interpretations of what you observe. These can be distributions of node properties (i.e.\ degree, centrality measures, etc.) or edge properties (i.e.\ edge weights). Be sure to bin these distributions appropriately.
+
+        \item Create an analogous figure for the randomized version of your network; write brief interpretations of what you observe.
+    \end{enumerate}
+
+    \item Discuss the similarities and/or differences between your network dataset and the randomized versions of this network. How does this exercise---comparing network data to a null model---help us gain insights from network analysis?
+\end{enumerate}
+
+\clearpage
+
+\section{(Optional)}
+
+For every problem set this semester, there will be an opportunity to earn extra credit. Since this is a fairly new course (of a new masters program), we are eager to receive genuine feedback on the material, pace, instruction style, etc.\ of the course so far. Note: Learning how to give effective feedback is an important skill during your PhD, so we hope this is an opportunity for you to skill-build and improve the course for future students. (Also, it's a bit odd to be evaluated on on how good your feedback is, so we will be generous with awarding points for these. With that said, please take some time to provide us with productive comments!) If you need resources for giving effective feedback, here are a few:
+
+\begin{itemize}
+    \item \url{https://hbr.org/2017/10/how-to-give-feedback-people-can-actually-use}
+    \item \url{https://www.sessionlab.com/blog/feedback-techniques/}
+\end{itemize}
+\end{document}
