@@ -128,7 +128,7 @@ Public repo \href{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Ass
         \end{enumerate}
         \item[] \texttt{pickle}\footcite{python-pickle,alden-pickles}
         \begin{enumerate}
-            \item d
+            \item It can handle a wide variety of class types, and restore those class types as long as they are importable. 
         \end{enumerate}
     \end{enumerate}
     \item \textit{What are the disadvantages of each storage approach?}
@@ -149,6 +149,12 @@ Public repo \href{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Ass
     \response
     As detailed in the LWN piece,\footcite{alden-pickles} it is easy for a malicious actor to include code within a pickle that will automatically run during the unpickling process. This is obviously a security vulnerability. As this format is frequently used to share ML models between researchers, alternatives and improved detection are being developed. 
     \item \textit{For each storage approach, think of a scenario where that storage approach would be an optimal choice. Explain your reasoning.}
+    \begin{enumerate}
+        \item[] \texttt{csv}
+        \begin{enumerate}
+            \item Small graphs, perhaps for introductory graph theory. Consider something like the Petersen graph on 10 nodes with 15 edges. 
+        \end{enumerate}
+    \end{enumerate}
 \end{enumerate}
 \clearpage
 \section{}
