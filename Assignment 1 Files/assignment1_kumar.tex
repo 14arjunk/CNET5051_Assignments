@@ -118,6 +118,7 @@ Public repo \href{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Ass
 \textit{There are a lot of ways to store network data. Each format generally has advantages and disadvantages that make them suited to particular types of situations. Let’s explore the differences between storing network data in a }\texttt{.csv}, \texttt{pickle}\textit{, or} \texttt{.gml}\textit{ file, and in Elasticsearch, which is commonly used for graph database applications. For your research, look at the documentation for each approach, seek out StackOverflow threads, and consider consulting the Bagrow \& Ahn textbook.}
 \begin{enumerate}
     \item \textit{What are the advantages of each storage approach?}
+    \response
     \begin{enumerate}
         \item[] \texttt{.csv}:
         \begin{enumerate}
@@ -132,6 +133,7 @@ Public repo \href{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Ass
         \end{enumerate}
     \end{enumerate}
     \item \textit{What are the disadvantages of each storage approach?}
+    \response
     \begin{enumerate}
         \item[] \texttt{.csv}:
         \begin{enumerate}
@@ -149,6 +151,7 @@ Public repo \href{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Ass
     \response
     As detailed in the LWN piece,\footcite{alden-pickles} it is easy for a malicious actor to include code within a pickle that will automatically run during the unpickling process. This is obviously a security vulnerability. As this format is frequently used to share ML models between researchers, alternatives and improved detection are being developed. 
     \item \textit{For each storage approach, think of a scenario where that storage approach would be an optimal choice. Explain your reasoning.}
+    \response
     \begin{enumerate}
         \item[] \texttt{csv}
         \begin{enumerate}
@@ -222,7 +225,7 @@ Public repo \href{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Ass
     \item \textit{In 2--5 sentences, describe your network. What are the nodes, what are the links, what domain is it from? Be sure to include appropriate citation(s) to the original dataset or research paper, if relevant. }
 
 \response
-The dataset I chose is from a paper regarding the spatial analysis of vole (the mammal) contact networks in England's Kielder Forest Region, specifically, the Redesdale Catchment's Black Blake Hope area,\footcite{davis_spatial_2015} retrieved from \texttt{networkrepository.com}.\footcite{nr-aaai15} Here, the 
+The dataset I chose is from a paper regarding the spatial analysis of vole (the mammal) contact networks in England's Kielder Forest Region, specifically, the Redesdale Catchment's Black Blake Hope area,\footcite{davis_spatial_2015} retrieved from \texttt{networkrepository.com}.\footcite{nr-aaai15} Here, the nodes are the individual voles, marked as part of the study, with a spatial attribute so that the network can be compared to a spatial arrangement as well. The spatial characteristic is the location where the vole was trapped, weighted by the number of times it was trapped in a single location. The edges are contact data from the voles, defined in a binary manner as present or not present in the observed data, i.e., if they were caught by a common trap, but not necessarily at the same time ($\le 2$ chronologically consecutive trapping cycles). They are undirected, and duplicate edges are discarded to maintain a simple graph. 
 
     \item \textit{Compare your network's properties to those of a randomized network, by selecting a network null model to compare against. Your null model should preserve the degree distribution of the network, so randomize your network using e.g.\ a configuration model or degree-preserving network rewiring (see Class 4).}
     \begin{enumerate}[label=\roman*.]
