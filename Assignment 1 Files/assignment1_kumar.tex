@@ -118,6 +118,7 @@ Public repo \href{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Ass
 \textit{There are a lot of ways to store network data. Each format generally has advantages and disadvantages that make them suited to particular types of situations. Let’s explore the differences between storing network data in a }\texttt{.csv}, \texttt{pickle}\textit{, or} \texttt{.gml}\textit{ file, and in Elasticsearch, which is commonly used for graph database applications. For your research, look at the documentation for each approach, seek out StackOverflow threads, and consider consulting the Bagrow \& Ahn textbook.}
 \begin{enumerate}
     \item \textit{What are the advantages of each storage approach?}
+    \response
     \begin{enumerate}
         \item[] \texttt{.csv}:
         \begin{enumerate}
@@ -129,33 +130,83 @@ Public repo \href{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Ass
         \item[] \texttt{pickle}\footcite{python-pickle,alden-pickles}
         \begin{enumerate}
             \item It can handle a wide variety of class types, and restore those class types as long as they are importable. 
+            \item Can handle digraphs or multigraphs.
+            \item Fast and compact. 
+        \end{enumerate}
+        \item[] \texttt{gml}\footcite{yworks-gml,gephi-gml,passau-gml}
+        \begin{enumerate}
+            \item Human readable, logical to follow.
+            \item Can support node and edge attributes.
+            \item Widely compatible (Gephi, NetworkX, iGraph, cytoscape etc.)
+        \end{enumerate}
+        \item[] \texttt{Elasticsearch}\footcite{elastic-graph}
+        \begin{enumerate}
+            \item Scales well to very large datasets
+            \item Search, filtering, and aggregation can be much faster than other formats. 
+            \item Can be distributed among a project team easily, with a shared graph API multiple analyses could be run simultaneously. 
         \end{enumerate}
     \end{enumerate}
     \item \textit{What are the disadvantages of each storage approach?}
+    \response
     \begin{enumerate}
         \item[] \texttt{.csv}:
         \begin{enumerate}
             \item Edges are not naturally directed. This can be overcome by listing both $(i,j)\AND (j,i)$ in the edgelist, but can be clunky and is easily mistaken for a digraph with all edge directions reversed. 
             \item Ensure node/edge attributes do not themselves contain commas; Bagrow \& Ahn call this ``delimiter collision".\footcite{bagrow_working_2024}
             \item With a densely connected graph, the edgelist yields $M\sim N^2$, which is not much more space efficient than the adjacency matrix itself. 
-            \item Separate files may be required for edge and node attributes. 
+            \item Separate files may be required for edge and node attributes.
+            \item All data is encoded as a string, so re-casting types is often required. 
+            \item Nodes with $k=0$ are dropped, since by definition they do not appear in an edgelist. 
         \end{enumerate}
         \texttt{pickle}\footcite{python-pickle,alden-pickles}
         \begin{enumerate}
             \item The very first item on both the python docs and the LWN article is the fact that unpickling an unknown object is a risk. More on this in Q1.c.
+            \item You must unpickle the whole object, you cannot load a subgraph. 
+            \item Python only, not human readable.
+        \end{enumerate}
+        \item[] \texttt{gml}\footcite{yworks-gml,passau-gml}
+        \begin{enumerate}
+            \item Verbose, too lengthy with very large graphs.
+            \item Exact attribute handling can vary in different programs. 
+        \end{enumerate}
+        \item[] \texttt{Elasticsearch}\footcite{elastic-graph}
+        \begin{enumerate}
+            \item Requires a database backend, overkill for small graphs.
+            \item Not designed for many traditional graph algorithms or analyses, so data needs to be imported to NetworkX or similar for dedicated analysis. 
+            \item Potentially steeper learning curve? At least it would be for me. 
+            \item Some potential security risk, see Q1.c
         \end{enumerate}
     \end{enumerate}
     \item \textit{At least one of these storage approaches poses a non-trivial security risk. Which one(s) should we worry about, and what is the security risk? Please explain this as simply as possible.}
     \response
     As detailed in the LWN piece,\footcite{alden-pickles} it is easy for a malicious actor to include code within a pickle that will automatically run during the unpickling process. This is obviously a security vulnerability. As this format is frequently used to share ML models between researchers, alternatives and improved detection are being developed. 
+
+    For Elasticsearch, any misconfigured database access protocol is a potential security vulnerability. 
     \item \textit{For each storage approach, think of a scenario where that storage approach would be an optimal choice. Explain your reasoning.}
+    \response
     \begin{enumerate}
         \item[] \texttt{csv}
         \begin{enumerate}
-            \item Small graphs, perhaps for introductory graph theory. Consider something like the Petersen graph on 10 nodes with 15 edges. 
+            \item Small graphs, perhaps for introductory graph theory. Consider something like the Petersen graph on 10 nodes with 15 edges. No dependencies, even tech unsavvy students can open it in a spreadsheet. 
+        \end{enumerate}
+        \item[] \texttt{pickle}
+        \begin{enumerate}
+            \item A Python only object created yourself (or a trusted collaborator etc.) with complex types or classes that are required to be reloaded exactly. For example, the Kardashian network data example in class. 
+        \end{enumerate}
+        \item[] \texttt{gml}
+        \begin{enumerate}
+            \item A small to midsized graph with multiple node or edge attributes, that is easily shared between collaborators or posted open source for analysis with varied software. For example, testing new metrics against the Karate Club graph. 
+        \end{enumerate}
+        \item[] \texttt{Elasticsearch}
+        \begin{enumerate}
+            \item A massive, dynamic network with multiple text based attributes for searching or indexing. For example, a collaboration or citation network for science-of-science applications.
         \end{enumerate}
     \end{enumerate}
 \end{enumerate}
+
+
+
+
 \clearpage
 \section{}
 
@@ -185,10 +236,69 @@ Public repo \href{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Ass
 
 \begin{enumerate}[label=(\alph*)]
     \item \textit{(Bagrow \& Ahn Question 11.2) The basic edge exchange algorithm (as shown above) will enter an infinite loop and never end if no allowable exchanges are present. Describe a scenario where you will never be able to find an allowable edge exchange according to this algorithm.}
+    \response
+    This algo would loop forever when no valid edge swap exists. For example, a star graph would fail the first check, because at least one $i,j$ would equal $u,v$. Another example could be any $K_n$ complete clique, even two disjoint edges would have any possible rewiring already instantiated. 
 
     \item \textit{(Bagrow \& Ahn Question 11.3) Modify the algorithm to prevent an infinite loop by abandoning the exchange process after reaching a given number of attempts without a successful exchange.}
+    \response
+    To prevent an infinite loop, we could add a parameter $A$ and a counter of consecutive failed attempts, increased whenever a sampled pair of edges violates either check and reset to zero after a successful exchange. The loop halts when $s = t$ or $a = A$. 
+    
+    A natural choice might be $A = \binom{M}{2}$, the number of distinct edge pairs. However, since edges are sampled with replacement (\texttt{get\_random\_edge()}) this does not guarantee that every possible pair was tested (since we are checking edges at random), so giving up indicates that swaps are merely likely to be unavailable rather than proving it.
 
+    \begin{algorithmic}[1]
+\Procedure{EDGE\_EXCHANGE}{$G, t, A$}
+    \State $s \gets 0$ \Comment{successful exchanges}
+    \State $a \gets 0$ \Comment{count failed attempts}
+    \While{$s < t$ \textbf{and} $a < A$}
+        \State $(i, j) \gets$ \texttt{get\_random\_edge}$(G)$
+        \State $(u, v) \gets$ \texttt{get\_random\_edge}$(G)$
+        \If{$i = u$ \textbf{or} $i = v$ \textbf{or} $j = u$ \textbf{or} $j = v$}
+            \State $a \gets a + 1$
+            \State \textbf{continue}
+        \EndIf
+        \If{\texttt{has\_edge}$(G, i, v)$ \textbf{or} \texttt{has\_edge}$(G, j, u)$}
+            \State $a \gets a + 1$
+            \State \textbf{continue}
+        \EndIf
+        \State \texttt{remove\_edge}$(G, i, j)$
+        \State \texttt{remove\_edge}$(G, u, v)$
+        \State \texttt{add\_edge}$(G, i, v)$
+        \State \texttt{add\_edge}$(G, j, u)$
+        \State $s \gets s + 1$
+        \State $a \gets 0$ \Comment{reset after success}
+    \EndWhile
+    \State \Return $G$, $s$
+\EndProcedure
+\end{algorithmic}
+    
     \item \textit{(Bagrow \& Ahn Question 11.4) Modify the algorithm to preserve not only the degrees of every node but also the overall connectivity of the network. How does this additional constraint make edge exchange more difficult?}
+    \response
+\begin{algorithmic}[1]
+\Procedure{EDGE\_EXCHANGE\_COMPONENTS}{$G, t, A$}
+    \State $c \gets$ \texttt{component\_labels}$(G)$ \Comment{computed once, shouldn't change. Indexes each node to its component's label.}
+    \State $s \gets 0$; \quad $a \gets 0$
+    \While{$s < t$ \textbf{and} $a < A$}
+        \State $(i, j) \gets$ \texttt{get\_random\_edge}$(G)$
+        \State $(u, v) \gets$ \texttt{get\_random\_edge}$(G)$
+        \If{$i = u$ \textbf{or} $i = v$ \textbf{or} $j = u$ \textbf{or} $j = v$ \textbf{or} $c[i] \neq c[u]$}
+            \State $a \gets a + 1$; \textbf{continue}
+        \EndIf
+        \If{\texttt{has\_edge}$(G, i, v)$ \textbf{or} \texttt{has\_edge}$(G, j, u)$}
+            \State $a \gets a + 1$; \textbf{continue}
+        \EndIf
+        \State \texttt{remove\_edge}$(G, i, j)$; \texttt{remove\_edge}$(G, u, v)$
+        \State \texttt{add\_edge}$(G, i, v)$; \texttt{add\_edge}$(G, j, u)$
+        \If{\textbf{not} \texttt{component\_intact}$(G, i, c)$}
+            \Comment{BFS from $i$ reaches all nodes with label $c[i]$?}
+            \State \texttt{remove\_edge}$(G, i, v)$; \texttt{remove\_edge}$(G, j, u)$ \Comment{undo}
+            \State \texttt{add\_edge}$(G, i, j)$; \texttt{add\_edge}$(G, u, v)$
+            \State $a \gets a + 1$; \textbf{continue}
+        \EndIf
+        \State $s \gets s + 1$; \quad $a \gets 0$
+    \EndWhile
+    \State \Return $G$, $s$
+\EndProcedure
+\end{algorithmic}
 
     \item \textit{(Bagrow \& Ahn Question 11.5) Suppose your network has a binary attribute $x_i \in \{-1, 1\}$ associated with every node $i$. Modify the algorithm to preserve the correlation on edges of $x$. This means that any new edge $(a, b)$ inserted in place of an existing edge $(i, j)$ must have the same attributes $(x_i, x_j) = (x_a, x_b)$. How might this additional constraint make edge exchange more difficult?}
 \end{enumerate}
@@ -222,7 +332,7 @@ Public repo \href{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Ass
     \item \textit{In 2--5 sentences, describe your network. What are the nodes, what are the links, what domain is it from? Be sure to include appropriate citation(s) to the original dataset or research paper, if relevant. }
 
 \response
-The dataset I chose is from a paper regarding the spatial analysis of vole (the mammal) contact networks in England's Kielder Forest Region, specifically, the Redesdale Catchment's Black Blake Hope area,\footcite{davis_spatial_2015} retrieved from \texttt{networkrepository.com}.\footcite{nr-aaai15} Here, the 
+The dataset I chose is from a paper regarding the spatial analysis of vole (the mammal) contact networks in England's Kielder Forest Region, specifically, the Redesdale Catchment's Black Blake Hope area,\footcite{davis_spatial_2015} retrieved from \texttt{networkrepository.com}.\footcite{nr-aaai15} Here, the nodes are the individual voles, marked as part of the study, with a spatial attribute so that the network can be compared to a spatial arrangement as well. The spatial characteristic is the location where the vole was trapped, weighted by the number of times it was trapped in a single location. The edges are contact data from the voles, defined in a binary manner as present or not present in the observed data, i.e., if they were caught by a common trap, but not necessarily at the same time ($\le 2$ chronologically consecutive trapping cycles). They are undirected, and duplicate edges are discarded to maintain a simple graph. 
 
     \item \textit{Compare your network's properties to those of a randomized network, by selecting a network null model to compare against. Your null model should preserve the degree distribution of the network, so randomize your network using e.g.\ a configuration model or degree-preserving network rewiring (see Class 4).}
     \begin{enumerate}[label=\roman*.]
