@@ -7,6 +7,7 @@
 \usepackage{mathtools}
 \usepackage{mathdots}
 \usepackage{suppose}
+\usepackage{booktabs}
 %\usepackage{venndiagram}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta, decorations.markings, positioning}
@@ -275,7 +276,7 @@ Public repo \href{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Ass
     \response
 \begin{algorithmic}[1]
 \Procedure{EDGE\_EXCHANGE\_COMPONENTS}{$G, t, A$}
-    \State $c \gets$ \texttt{component\_labels}$(G)$ \Comment{computed once, shouldn't change. Indexes each node to its component's label.}
+    \State $c \gets$ \texttt{component\_labels}$(G)$ \Comment{computed once, shouldn't change. Indexes each node to its component's label. Can be done by enumerating nx.connected\_components for example.}
     \State $s \gets 0$; \quad $a \gets 0$
     \While{$s < t$ \textbf{and} $a < A$}
         \State $(i, j) \gets$ \texttt{get\_random\_edge}$(G)$
@@ -289,7 +290,7 @@ Public repo \href{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Ass
         \State \texttt{remove\_edge}$(G, i, j)$; \texttt{remove\_edge}$(G, u, v)$
         \State \texttt{add\_edge}$(G, i, v)$; \texttt{add\_edge}$(G, j, u)$
         \If{\textbf{not} \texttt{component\_intact}$(G, i, c)$}
-            \Comment{BFS from $i$ reaches all nodes with label $c[i]$?}
+            \Comment{Determines if the component remains connected, could be a BFS from $i$}
             \State \texttt{remove\_edge}$(G, i, v)$; \texttt{remove\_edge}$(G, j, u)$ \Comment{undo}
             \State \texttt{add\_edge}$(G, i, j)$; \texttt{add\_edge}$(G, u, v)$
             \State $a \gets a + 1$; \textbf{continue}
@@ -300,7 +301,53 @@ Public repo \href{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Ass
 \EndProcedure
 \end{algorithmic}
 
+This algorithm has a much higher likelihood of hitting the failure threshold. Consider, for example, a component of a single edge or even any tree. There are very few valid swaps, so reaching the stop criterion is much more likely.
+
     \item \textit{(Bagrow \& Ahn Question 11.5) Suppose your network has a binary attribute $x_i \in \{-1, 1\}$ associated with every node $i$. Modify the algorithm to preserve the correlation on edges of $x$. This means that any new edge $(a, b)$ inserted in place of an existing edge $(i, j)$ must have the same attributes $(x_i, x_j) = (x_a, x_b)$. How might this additional constraint make edge exchange more difficult?}
+\response
+\begin{algorithmic}[1]
+\Procedure{EDGE\_EXCHANGE\_ATTRIBUTE}{$G, x, t, A$}
+    \State $s \gets 0$; \quad $a \gets 0$
+    \While{$s < t$ \textbf{and} $a < A$}
+        \State $(i, j) \gets$ \texttt{get\_random\_edge}$(G)$
+        \State $(u, v) \gets$ \texttt{get\_random\_edge}$(G)$
+        \If{$i = u$ \textbf{or} $i = v$ \textbf{or} $j = u$ \textbf{or} $j = v$}
+            \State $a \gets a + 1$; \textbf{continue}
+        \EndIf
+        \If{$x_j \neq x_v$ \textbf{and} $x_i \neq x_u$}
+            \Comment{match attribute values}
+            \State $a \gets a + 1$; \textbf{continue}
+        \EndIf
+        \If{\texttt{has\_edge}$(G, i, v)$ \textbf{or} \texttt{has\_edge}$(G, j, u)$}
+            \State $a \gets a + 1$; \textbf{continue}
+        \EndIf
+        \State \texttt{remove\_edge}$(G, i, j)$; \texttt{remove\_edge}$(G, u, v)$
+        \State \texttt{add\_edge}$(G, i, v)$; \texttt{add\_edge}$(G, j, u)$
+        \State $s \gets s + 1$; \quad $a \gets 0$
+    \EndWhile
+    \State \Return $G$, $s$
+\EndProcedure
+\end{algorithmic}
+This is a somewhat similar case to the connectivity question above. There are many more potential invalid edge swaps, so the likely of hitting the cap $A$ increases. Unlike connectivity, it is a local filter, not a global one, so shouldn't penalize computational complexity as badly.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ll}
+\toprule
+\textbf{Pair of edge types} & \textbf{Attribute check} \\
+\midrule
+$(+1,+1)$ with $(+1,+1)$ & passes \\
+$(-1,-1)$ with $(-1,-1)$ & passes \\
+$(+1,+1)$ with $(-1,-1)$ & fails \\
+$(+1,+1)$ with mixed & passes (either orientation) \\
+$(-1,-1)$ with mixed & passes (either orientation) \\
+mixed with mixed & passes or fails depending on orientation\\ & (if \texttt{get\_random\_edge} returns in arbitrary or fixed order) \\
+\bottomrule
+\end{tabular}
+\label{tab:attr-check}
+\end{table}
+
+For example, a network with high assortativity, where say nearly all edges are $\{+1,+1\}$ or $\{-1,-1\}$, may have a failure rate roughly 50\%.
 \end{enumerate}
 \clearpage
 \section{}
