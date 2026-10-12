@@ -383,6 +383,8 @@ For example, a network with high assortativity, where say nearly all edges are $
     The core reason for the differences is the fact that my function is specifically written to accept a node as an input and check the betweeness centrality of that specific node only. The error handling can therefore be more specifically implemented. \texttt{nx.betweenness\_centrality} finds the centrality score for \textit{all} the nodes in the graph. Therefore, a single bad node cannot be an input into the function, and the return from the function is a dict, not a single number. In cases 4 and 5, both gave the correct answers, via different mechanisms. 
 
     \item \textit{Putting it all together: Write a function that takes a centrality function as input and tests the function for robustness to edge cases (like a graph with no connectivity) and correctness of outputs. Explain why you selected the test cases you chose.}
+    \response
+    I am reading this question as asking for a testing function that is capable of testing any betweenness centrality function, rather than any generic centrality function at all (for which I didn't have much idea than to compare against the equivalent nx function, since the failure conditions could be so different. The issue is that it is difficult to know 1-to-1 exactly which nx function should be tested against, due to naming conventions and coverage--consider the transitivity question, for instance.)
 \end{enumerate}
 \clearpage
 
