@@ -380,6 +380,8 @@ For example, a network with high assortativity, where say nearly all edges are $
 
     Fifth, for a case of a 2 node graph with no links between them, both my augmented function and networkx correctly return 0. Mine does so through the \texttt{number\_of\_edges()==0} return and networkx does so because all shortest path searches can only return the source itself, so they are all 0.  
 
+    The core reason for the differences is the fact that my function is specifically written to accept a node as an input and check the betweeness centrality of that specific node only. The error handling can therefore be more specifically implemented. \texttt{nx.betweenness\_centrality} finds the centrality score for \textit{all} the nodes in the graph. Therefore, a single bad node cannot be an input into the function, and the return from the function is a dict, not a single number. In cases 4 and 5, both gave the correct answers, via different mechanisms. 
+
     \item \textit{Putting it all together: Write a function that takes a centrality function as input and tests the function for robustness to edge cases (like a graph with no connectivity) and correctness of outputs. Explain why you selected the test cases you chose.}
 \end{enumerate}
 \clearpage
