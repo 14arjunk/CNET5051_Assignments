@@ -431,6 +431,18 @@ The dataset I chose is from a paper regarding the spatial analysis of vole (the 
     \end{enumerate}
 
     \item \textit{Discuss the similarities and/or differences between your network dataset and the randomized versions of this network. How does this exercise---comparing network data to a null model---help us gain insights from network analysis?}
+    \response
+
+    The randomized netwworks, which were produced from 50 different degree-preserving edges swaps, differened sharply in structure from the actual vole contact network. The real network's clustering coefficient's are far higher, and the average path length in the GCC is much higher as well. The GCC itself also holds slightly fewer nodes than the randomized networks do. 
+
+    The only tested measure that did not vary greatly was the degree assortativity. 
+
+    Taken together, the high clustering and long paths indicate that vole contacts are highly spatially separated with most contacts being voles trapped in the same locations over consecutive trapping sessions. The random rewiring essentially adds a bunch of spatially and temporally long range contacts (voles trapped in distant traps or non-consecutive sessions), linking voles that would never actually meet. 
+
+    Comparing to the null model is useful, because the degree distribution of the network alone does not explain other features of the real vole contact network, so we may be able to attribute them to something else. In this case, that clearly appears to be the trapping methodology (and perhaps the underlying actual vole populations) rather than the degree distribution. 
+
+    In the actual comparison, the z-scores are huge, probably because of how little variance there was in the null models' spread on these statistics. Of particular note is the fact that the null model ignores the consecutive-session trapping constraint, so a more sophisticated model that preserves the temporal aspect would actually be required for more rigorous analysis. 
+
 \end{enumerate}
 
 \clearpage
