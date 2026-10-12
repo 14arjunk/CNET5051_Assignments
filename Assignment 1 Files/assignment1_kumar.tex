@@ -369,6 +369,10 @@ For example, a network with high assortativity, where say nearly all edges are $
     \end{enumerate}
 
     \item \textit{Compare your function to the corresponding }\texttt{networkx}\textit{ function across several graphs you design as test inputs, including one with no connectivity. Does your function ever return different results from the }\texttt{networkx}\textit{ function? Why do you think this is the case?}
+    \response
+    The first test case I used was an input of a dictionary listing nodes rather than a \texttt{networkx} graph. My augmented function correctly identified the problem with the type check, while the networkx function did produce an error as well. 
+
+    Second 
 
     \item \textit{Putting it all together: Write a function that takes a centrality function as input and tests the function for robustness to edge cases (like a graph with no connectivity) and correctness of outputs. Explain why you selected the test cases you chose.}
 \end{enumerate}
