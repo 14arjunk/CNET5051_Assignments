@@ -1,0 +1,206 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{mathdots}
+\usepackage{suppose}
+\usepackage{booktabs}
+%\usepackage{venndiagram}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, decorations.markings, positioning}
+\usepackage{geometry}
+%\usepackage[table,dvipsnames]{xcolor}
+%\definecolor{LightGray}{gray}{0.9}
+%\usepackage{multicol}
+%\usepackage{color}
+%\setlength{\columnseprule}{1pt}
+%\def\columnseprulecolor{\color{black}}
+\newcommand{\Or}{\text{ or }}
+\newcommand{\AND}{\text{ and }}
+\newcommand{\Say}{\text{Say }}
+\newcommand{\Let}{\text{Let }}
+\newcommand{\For}{\text{ for }}
+\newcommand{\Forall}{\text{ for all }}
+\newcommand{\On}{\text{ on }}
+\newcommand{\Take}{\text{Take }}
+\newcommand{\From}{\text{From }}
+\newcommand{\Where}{\text{ where }}
+\newcommand{\Note}{\textbf{Note: }}
+\newcommand{\pl}{\left(}
+\newcommand{\pr}{\right)}
+\newcommand{\bl}{\left[}
+\newcommand{\br}{\right]}
+\newcommand{\Cl}{\left\{}
+\newcommand{\Cr}{\right\}}
+\newcommand{\mb}{\mathbb}
+\newcommand{\mc}{\mathcal}
+\newcommand{\Span}{\text{span}}
+\newcommand{\Range}{\text{range}}
+\newcommand{\Null}{\text{null}}
+\newcommand{\Sin}[1]{\sin(#1)}
+\newcommand{\Cos}[1]{\cos(#1)}
+\newcommand{\response}{\subsubsection*{Response}}
+\newcommand{\note}{\textbf{Note:\text{ }}}
+\newcommand{\contra}{$\rightarrow\leftarrow$}
+\newcommand{\resetal}{\setcounter{equation}{0}}
+\usepackage{enumitem}
+\newcommand{\nc}[1]{(#1)}
+\setlist[enumerate,1]{label=\nc{\alph*}}
+\setlist[enumerate,2]{label=\nc{\roman*}}
+\setlist[enumerate,3]{label=\nc{\roman*}}
+\setlist[enumerate,4]{label=\nc{\arabic*}}
+\newcommand{\Space}{\text{ }}
+\renewcommand{\labelitemi}{\textendash} 
+\renewcommand{\labelitemii}{\textasteriskcentered} 
+\renewcommand{\labelitemiii}{\textbullet} 
+\renewcommand{\labelitemiv}{\textperiodcentered} 
+%\usepackage{pgfplots}
+%\pgfplotsset{compat=1.18}
+%\usepackage{etoolbox}
+%\usepackage{colortbl}
+\usepackage{setspace}
+\usepackage[indent=0.25in]{parskip}
+\usepackage{bm}
+\usepackage{nicematrix}
+\usepackage{dirtytalk}
+\usepackage{pdfpages}
+\usepackage{logicproof}
+\usepackage{etoolbox}
+\usepackage{arydshln}
+\makeatletter
+\renewcommand{\lp@start@proof@line}{%
+  \stepcounter{lp@line}%
+  (\arabic{lp@line})%  
+  &%
+  \lp@continue@proof@line%
+}
+\makeatother
+\usepackage{hyperref} 
+\hypersetup{
+      colorlinks=true,
+      linkcolor=blue,
+      citecolor=blue,
+      urlcolor=blue
+    }
+\usepackage{mathrsfs}
+\usepackage{algpseudocode}
+%\newcommand{\Lapl}{\mathscr{L}}
+%\newcommand{\iLapl}{\mathscr{L}^{-1}}
+\renewcommand{\thesection}{Question \arabic{section}}
+\renewcommand{\contentsname}{Table of Contents}
+\renewcommand{\theequation}{\arabic{equation}}
+\usepackage[backend=biber,
+style=verbose,dashed=false]{biblatex}
+\addbibresource{bib.bib}
+\defbibheading{bibliography}[\bibname]{%
+  \section*{\centering#1}%
+}
+\newcommand{\Ang}[1]{\left\langle #1 \right\rangle}
+\urldef{\repourl}\url{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Assignment%202%20Files}
+
+
+
+\title{\textbf{Assignment 2}}
+\author{Arjun G. Kumar\\
+CNET 5051\\
+Northeastern University}
+\date{30 October 2026}
+
+\begin{document}
+\maketitle
+\section*{Question 0}
+\textit{Include your code in a (well-documented, commented, clear) }\texttt{assignment02.ipynb}\textit{ file. Scores for the code-based questions below will be based on your written responses and code.}
+\response
+Public repo \href{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Assignment%202%20Files}{here.}\footnote{\repourl}
+
+\section{}
+\textit{In this question we will work with degree-controlled random graph null models.}
+\begin{enumerate}
+    \item \textit{\textbf{The Configuration Model.} First, implement the configuration model in Python. Your function should take a list of integers as a degree sequence, and return a graph where each vertex has the assigned degree. Your graph may contain duplicate edges and self-loops.}
+    \item \textit{\textbf{The Chung Lu Model.} Next, implement the Chung Lu random graph model. Remember that this model creates an edge between nodes $i$ and $j$ with independent probabilities defined by vertex degree and the total number of edges in the graph:}
+    \[
+        p_{ij} = \frac{k_i k_j}{2m},
+    \]
+    \textit{where $2m \coloneqq \sum_i k_i$. Your implementation should take a list of integers as a degree sequence, and return a simple graph with approximately the desired degree sequence.}
+    \item \textit{\textbf{Model Differences.} For the degree sequence }\texttt{degrees=[8,5,5,4,3,2,2,2,1,1,1,1,1,1,1]}\textit{, generate a thousand random graphs using the Configuration Model and the Chung Lu model, then:}
+    \begin{enumerate}
+        \item \textit{Plot the average adjacency matrix for each model. This should be a heatmap of:}
+        \[
+            \Ang{A} = \frac{1}{N}\sum_{i=1}^{N} A_i
+        \]
+        \textit{where $N$ is the number of generated random graphs, and $A_i$ is the adjacency matrix of the $i$th graph. (Hint: matplotlib's }\texttt{imshow}\textit{ is useful for displaying matrix data.)}
+        \item \textit{Choose two graph metrics: one that should be approximately the same across graphs generated by both models, and one that should diverge significantly between the two models. For each metric, make a plot (histogram, kernel-density estimate, or cumulative distribution function) showing the distribution of the metric across all generated graphs from each model.}
+    \end{enumerate}
+    \textit{\textbf{Note:} For this stage you may remove self-loops and duplicate edges from your configuration model graphs if it helps make a direct comparison to Chung Lu graphs.}
+    \item \textit{\textbf{Discussion.} Discuss the above results briefly. Why do the models produce similar results under some metrics and different results under others?}
+\end{enumerate}
+\response
+
+
+\clearpage
+\section{}
+\textit{In this question we will gain experience with community detection.}
+\begin{enumerate}
+    \item \textit{\textbf{Finding communities.} Download a network dataset from \url{https://networkrepository.com/} with between roughly $1{,}000 < N < 5{,}000$ nodes (select a different dataset from the one you used in assignment 1). Select a modularity maximization algorithm to detect communities in this graph.}
+    \begin{enumerate}
+        \item \textit{Visualize your network, coloring the nodes by community membership.}
+        \item \textit{Report the modularity of the partition your algorithm found.}
+        \item \textit{Report the number of communities detected.}
+        \item \textit{Store your partition as a dictionary in the form of }\texttt{\{node\_id: community\_id\}}\textit{.}
+    \end{enumerate}
+    \item \textit{\textbf{Null models.} Create a degree-preserving randomization of your network, and run the community detection algorithm you chose in part a on your randomized graph. Store each partition as a dictionary in the form of }\texttt{\{node\_id: community\_id\}}\textit{.}
+    \item \textit{\textbf{Plotting a null model comparison.} You should now have two dictionaries, corresponding to the partitions from parts a and b. Create a figure with two subplots: In each, plot the community size distribution of each partition. Your figure should be publication-quality, with well-labeled, consistent axes, log-scaled wherever relevant, etc.}
+    \item \textit{\textbf{Analysis.} For the different partitions computed above, discuss how you would approach comparing this functions quantitatively. For example, imagine a function $f(p_1, p_2)$ that takes partitions $p_1$ and $p_2$ as input and returns a number corresponding to how similar or dissimilar the partitions are. What properties should this function $f$ have? For this question, base your answer on a technique used in the literature, after a brief search about methods for quantifying differences between graph partitions. You do not need to implement the function, a high-level discussion is sufficient.}
+\end{enumerate}
+\response
+
+
+\clearpage
+\section{}
+\textit{In this question we will revisit degree sequences with a focus on preferential attachment.}
+
+\textit{We have worked with $G(n,p)$ random graphs extensively. We have also discussed how most graphs are not random, but follow some kind of preference for homophily or highly ``desirable'' nodes. One common preference is to connect to high degree nodes, reinforcing a rich-get-richer dynamic. We will create a network growth model, where we add new vertices to a graph, and create edges to existing vertices with a probability based on vertex $i$'s degree $k_i$:}
+\[
+    p(i) = \frac{k_i^{\alpha} + 1}{\sum_{j=0}^{n} \pl k_j^{\alpha} + 1 \pr}
+\]
+\textit{The $\alpha$ parameter allows us to configure the model between a sublinear preference for high-degree nodes ($0 < \alpha < 1$), a linear preference ($\alpha = 1$), and a superlinear preference ($\alpha > 1$). The $+1$ in the above equation ensures some chance of connecting to any vertex, even if it initially has a degree of zero.}
+\begin{enumerate}[label=(\roman*)]
+    \item \textit{\textbf{Implement the generator.} Write a graph generating function }\texttt{preferentialGenerator(n, a)}\textit{ that returns a graph with $n$ vertices and $\alpha = a$.}
+    \item \textit{\textbf{Degree analysis.} Generate graphs with 1,000 nodes and alpha values of 0.1, 1, and 2. Make a plot comparing the three degree distributions. You may use histograms, kernel-density estimates, or cumulative distribution functions. However, your plots should be easy to interpret: select number of bins or bin widths, log scale, or other attributes as needed to produce a high-quality figure.}
+\end{enumerate}
+\textit{We will now pivot to the random walk model of network generation. In this model, every time we add a vertex $i$ we add two edges. First, an edge to an existing random vertex $j$. Then, with probability $p$, we add an edge from $i$ to a random neighbor of $j$. Otherwise we instead add an edge to another random vertex in the graph.}
+\begin{enumerate}[label=(\roman*), resume]
+    \item \textit{\textbf{Implement the generator.} Write a graph generating function }\texttt{randomWalkGenerator(n, p)}\textit{ that returns a graph with $n$ vertices generated by random walks with probability $p$.}
+    \item \textit{\textbf{Clustering analysis.} Generate graphs with 1,000 nodes and $p$ values of 0, 0.1, 0.5, and 0.9. Make a plot comparing the four clustering distributions. As in part (ii), make these plots easily interpretable.}
+\end{enumerate}
+\textit{And finally\ldots}
+\begin{enumerate}[label=(\roman*), resume]
+    \item \textit{\textbf{Interpretation.} Compare the graphs created by the two network growth models. What kind of structures do they produce? In what circumstances might we want to use }\texttt{preferentialGenerator}\textit{ as a null model, and when might the random walk model be a more appropriate null assumption?}
+\end{enumerate}
+\response
+
+
+\clearpage
+\section{}
+\textit{We are training you to conduct original research, and a crucial component of that is a literature review. We can conduct literature reviews for several reasons, including familiarizing ourselves with a topic of study, a set of related methods, or the conventional wisdom of a field. When beginning a research project we typically want to know whether our research question has been asked before (and if so, using what tools and with what data), what related questions have been asked, and what gaps in understanding remain that we can try to answer.}
+
+\textit{Today we will start small. Search Google Scholar for five papers on different community detection algorithms. Don't use the ones we've discussed extensively in class (label propagation, Louvain, Girvan-Newman). For each algorithm, answer the following:}
+\begin{enumerate}
+    \item \textit{What measure is being optimized (how do we know a given partition is optimal or good? Are they use modularity maximization, or something else?)}
+    \item \textit{Algorithmically (a high level explanation in a few sentences is fine), how are partitions selected / sampled?}
+    \item \textit{When did this technique come out? Does the journal or conference suggest what field this algorithm is used in? Is it terribly obscure? (We can use citation count as a proxy for obscurity here)}
+    \item \textit{Is the algorithm particularly well-suited to certain kinds of graphs? (Does it assume sparse graphs? A core-periphery structure? Does it scale well / poorly? Add a little context about where you might / should not use this algorithm)}
+\end{enumerate}
+\textit{I encourage you to read selectively; you want to understand how these algorithms work and where and how they could be used, but you don't need to understand every check for division by zero or the full literature review of how this approach has been used in MRI analysis and how detected neuronal communities differ from established medical literature. Read papers for what you need from them.}
+\response
+
+
+\clearpage
+\section{(Optional)}
+\textit{For every problem set this semester, there will be an opportunity to earn extra credit. Since this is a new(-ish) course, we are eager to receive genuine feedback on the material, pace, instruction style, etc.\ of the course so far. Please provide any feedback about the lectures in recent weeks and/or this assignment.}
+\response
+
+\end{document}
