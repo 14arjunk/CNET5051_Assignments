@@ -183,7 +183,8 @@ Public repo \href{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Ass
     \item \textit{\textbf{Analysis.} For the different partitions computed above, discuss how you would approach comparing this functions quantitatively. For example, imagine a function $f(p_1, p_2)$ that takes partitions $p_1$ and $p_2$ as input and returns a number corresponding to how similar or dissimilar the partitions are. What properties should this function $f$ have? For this question, base your answer on a technique used in the literature, after a brief search about methods for quantifying differences between graph partitions. You do not need to implement the function, a high-level discussion is sufficient.}
 \end{enumerate}
 \response
-
+I have chosen to use this netwook with $N=1005$ nodes from SNAP (Stanford Network Analysis Project -- Large Network Dataset Collection) which tracks emails between members of a European research institute.\footcite{snap-email-eu-core,snapnets} I chose it because it actually has ground truth communities originating from the department of each of the researchers. It is a digraph and the nodes are given a numeric attribute corresponding to their home department at the institute. SNAP's site cites 2 papers\footcite{yin2017local,leskovec2007evolution}
+for the data, in addition to the generic requested SNAP citations.
 
 \clearpage
 \section{}
