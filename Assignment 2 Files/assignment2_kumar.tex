@@ -111,11 +111,12 @@ Northeastern University}
 
 \begin{document}
 \maketitle
+\tableofcontents
+\listoffigures
 \section*{Question 0}
 \textit{Include your code in a (well-documented, commented, clear) }\texttt{assignment02.ipynb}\textit{ file. Scores for the code-based questions below will be based on your written responses and code.}
 \response
 Public repo \href{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Assignment%202%20Files}{here.}\footnote{\repourl}
-
 \section{}
 \textit{In this question we will work with degree-controlled random graph null models.}
 \begin{enumerate}
@@ -166,7 +167,6 @@ Public repo \href{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Ass
     \end{enumerate}
     \item d
 \end{enumerate}
-
 \clearpage
 \section{}
 \textit{In this question we will gain experience with community detection.}
@@ -201,6 +201,25 @@ for the data, in addition to the generic requested SNAP citations.
     \item \texttt{partition\_dir} has stored the 6 communities.
     \end{enumerate}
     \item See .ipynb for the degree preserving directed edge swap null. The partition is stored in \texttt{partition\_null}.
+    \item I think \autoref{fig:communitiesheatmap} is the cleanest visualization in order to understand the nature of the communities in this network, so \autoref{fig:randomcommunitiesheatmap} reproduces the style below with the randomized null. \autoref{fig:communitysizebars} plots the community size distributions. We can see a nearly flat distribution in the edge swapped null, compared to the steep slope of the original communities. The CCDF in \autoref{fig:communitysizeccdf} underscores this difference. 
+    \begin{figure}[ht!]
+        \centering
+        \includegraphics[width=1.1\linewidth]{Assignment 2 Files/email_departments_vs_null_communities.png}
+        \caption{Communities found on directed EU research email network vs. department after degree preserving edge swaps}
+        \label{fig:randomcommunitiesheatmap}
+    \end{figure}
+    \begin{figure}[ht!]
+        \centering
+        \includegraphics[width=1.1\linewidth]{Assignment 2 Files/community_size_distributions.png}
+        \caption{Community size distributions in original EU email network vs. null}
+        \label{fig:communitysizebars}
+    \end{figure}
+    \begin{figure}[ht!]
+        \centering
+        \includegraphics[width=1\linewidth]{Assignment 2 Files/community_size_ccdf.png}
+        \caption{Distribution of community sizes in original EU email network vs. null}
+        \label{fig:communitysizeccdf}
+    \end{figure}
 \end{enumerate}
 
 \clearpage
@@ -244,7 +263,7 @@ for the data, in addition to the generic requested SNAP citations.
 
 
 \clearpage
-\section{(Optional)}
+\section{}
 \textit{For every problem set this semester, there will be an opportunity to earn extra credit. Since this is a new(-ish) course, we are eager to receive genuine feedback on the material, pace, instruction style, etc.\ of the course so far. Please provide any feedback about the lectures in recent weeks and/or this assignment.}
 \response
 
