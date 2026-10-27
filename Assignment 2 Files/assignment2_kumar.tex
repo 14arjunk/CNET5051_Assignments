@@ -187,7 +187,19 @@ I have chosen to use this netwook with $N=1005$ nodes from SNAP (Stanford Networ
 for the data, in addition to the generic requested SNAP citations.
 
 \begin{enumerate}
-    \item See .ipynb for comments on data and various attempts. The best visualization is in 
+    \item See .ipynb for comments on data and various visualization attempts. 
+    \begin{enumerate}
+        \item The best visualization is in \autoref{fig:communitiesheatmap}. The nodes are sized as the size of the department in reality, with the largest portion of the pie chart being the community that department's members most often were classified into. The heatmap shows the \% of each department who was placed into each detected community (columns).
+    \begin{figure}[ht!]
+        \centering
+        \includegraphics[width=1.1\linewidth]{Assignment 2 Files/email_departments_vs_communities.png}
+        \caption{Communities found on directed EU research email network vs. department}
+        \label{fig:communitiesheatmap}
+    \end{figure}
+    \item The modularity of the directed Louvain averaged 0.427 over 20 runs, with a minimum of 0.420 and a max of 0.429. 
+    \item The directed louvain found 6 communities in this run. When run repeatedly, it averaged 7.5 with a min of 6 and a max of 8. 
+    \item \texttt{partition\_dir} has stored the 6 communities.
+    \end{enumerate}
 \end{enumerate}
 
 \clearpage
