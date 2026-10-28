@@ -315,21 +315,28 @@ I chose 5 papers that are related in some ways, rather than 5 classic unrelated 
                 \item [\nc 2] A refinement phase, in which a second partitioning occurs. Nodes are kept as singletons and allowed to merge into partitions, but only \textit{within} the communities identified in the coarse partition. So each community in step 1 is now subdivided into multiple connected subcommunities. 
                 \item [\nc 3] The subcommunities from step (2) are the new super-nodes upon which to re-run the algorithm. The super nodes are grouped according to the coarse partition from step (1). 
             \end{enumerate}
-            The refinement is what let Leiden guarantee connectivity of communitites, which Leiden can fail to ensure. In this paper's experiments, Leiden failed to ensure connectivity 16\% of the time. 
+            The refinement is what let Leiden guarantee connectivity of communities, which Louvain can fail to ensure. In this paper's experiments, up to 16\% of Louvain's communities were disconnected, and up to 25\% were badly connected.
             \item Published in \textit{Scientific Reports} 2019, the authors are all affiliated with Leiden University in Holland. The authors come from applied mathematics, econometrics, and CS/data science respectively, however all are associated with the Centre for Science and Technology Studies complex systems and scientometrics (science-of-science) group. The authors and journal point to broad, interdisciplinary potential, and the Leiden algorithm has been implemented in many software packages and libraries. It has been cited over 6747 times. 
             \item It is built for very large, sparse (or ultra-sparse) graphs. On these applications, it can significantly out-perform Louvain while also reducing runtime greatly. Best application: need a good partition of a large network quickly. Does not guarantee in any way to be the optimum. Different runs can still be stuck in local maxima. Inherits issues of resolution limit if CPM is not used, although CPM comes with the added pressure of needing to chose a proper density to compare against. 
         \end{enumerate}
     \end{itemize}
-\end{enumerate}
-
-
-\paragraph{2. Spectral modularity maximization.}\footcite{newman2006modularity}
-\begin{enumerate}
-    \item Modularity. Newman's key move is to rewrite it for a two-way split as $Q = \frac{1}{4m}\, s^T B s$, where $s_i = \pm 1$ labels the side of node $i$, and $B_{ij} = A_{ij} - \frac{k_ik_j}{2m}$ is the \emph{modularity matrix}.
-    \item Writing $s$ in the eigenvectors of $B$ shows that $Q$ is largest when $s$ is as parallel as possible to the leading eigenvector. So the network is split by the \emph{signs} of the leading eigenvector's entries; the magnitudes act as a strength of membership. If $B$ has no positive eigenvalue, no split increases $Q$ and the group is called indivisible. More than two communities come from repeated bisection, using a generalized $B^{(g)}$ for each subgroup so that it is still the whole network's modularity being maximized (you cannot simply delete the cut edges, because that changes the degrees). After each split, a Kernighan--Lin-style fine-tuning step moves single vertices between the two sides to raise $Q$ further. Unlike classic graph partitioning, the number and sizes of the communities are not chosen in advance.
-    \item 2006, \textit{PNAS}, filed under Applied Mathematics. Newman is a physicist, and the test data (karate club, political books, collaboration and metabolic networks) are classic network science. It is one of the foundational modularity papers, so it is anything but obscure.
-    % TODO citation count
-    \item One split costs $O[(m+n)n]$, which is $O(n^2)$ on a sparse graph, and the whole algorithm runs in about $O(n^2 \log n)$. Newman says this was reasonable up to about 100{,}000 vertices on 2006 hardware: a 27{,}000-vertex network took about 20 minutes. That is far slower than Leiden, so I would use it on small or medium graphs, or when the eigenvector itself is useful (it identified the faction leaders in the karate club). It has modularity's resolution limit. I also suspect that because communities are only ever split and never merged back, a bad early split cannot be undone; the fine-tuning only works within one bisection at a time.
+    \item \textbf{Spectral modularity maximization}\footcite{newman2006modularity}
+    \begin{itemize}
+        \item This is Newman's 2006 method for optimizing the same modularity objective that Louvain does, but searching for the partition with linear algebra (eigenvectors) rather than local node moves. Despite the author, it is not the Girvan-Newman algorithm from class.
+        \begin{enumerate}
+            \item Modularity, in its standard configuration model form. Newman's key move is to rewrite the modularity of a split into two groups as $Q = \frac{1}{4m}\, s^T B s$, where $s_i = \pm 1$ says which group node $i$ is in, and $B_{ij} = A_{ij} - \frac{k_ik_j}{2m}$ is the ``modularity matrix", which has the null model built into it.
+            \item Choosing the best split is then an eigenvector problem.
+            \begin{enumerate}
+                \item[\nc 1] Find the leading eigenvector of $B$ (the one with the largest eigenvalue). $Q$ is largest when $s$ points as close to this direction as possible.
+                \item [\nc 2] Split the nodes by the \textit{sign} of their entry in that eigenvector: positive entries in one group, negative in the other.
+                \item [\nc 3] To get more than two communities, repeat on each group. We cannot simply delete the edges between the groups and rerun, because that changes the node degrees, so instead each group gets its own generalized $B$ that still measures the modularity of the whole network. A group is ``indivisible" once its $B$ has no positive eigenvalue, meaning no split can raise $Q$, and the algorithm stops there.
+            \end{enumerate}
+            Newman adds a fine-tuning step in the style of Kernighan-Lin, which moves single nodes across the split one at a time and keeps the best state seen. The number and sizes of communities are not chosen in advance, they come out of the stopping rule.
+            \item Published in \textit{PNAS} 2006, filed under Applied Mathematics. Newman is in a physics department (University of Michigan) and the examples are classic network science data, such as the karate club and a scientific collaboration network. As far as I can tell it is not obscure, since it is the paper that introduces the modularity matrix, but the citation count is the real check.
+            % TODO citation count
+            \item Per split the cost is $O[(m+n)n]$, which is $O(n^2)$ for a sparse graph, and the whole algorithm is about $O(n^2 \log n)$ on sparse graphs. Newman says this is reasonable up to roughly 100,000 vertices: a 27,000 vertex collaboration network took about 20 minutes on 2006 hardware. This is much slower than Leiden, so best suited to small or medium networks, or when the eigenvector itself is useful (in the karate club the heaviest entries are the known leaders of the two factions). Inherits the resolution limit of modularity. I suspect, though the paper does not say this, that because groups are only ever split and never merged back, a bad early split cannot be undone, and the fine-tuning only works within one split at a time.
+        \end{enumerate}
+    \end{itemize}
 \end{enumerate}
 
 \paragraph{3. Spatial modularity.}\footcite{expert2011spatial} This paper's contribution is a new objective rather than a new search procedure, but I think the objective is the more interesting part.
