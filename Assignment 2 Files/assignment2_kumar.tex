@@ -165,7 +165,17 @@ Public repo \href{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Ass
             \label{fig:deg4}
             \end{figure}
     \end{enumerate}
-    \item d
+    \item \autoref{fig:heatmaps} contains 3 panels which are the heatmaps of $\langle A \rangle$ for each model: Configuration Model, Configuration Model (Simple), and Chung-Lu. The nodes are sorted by target degree in the degree sequence, so $k_0=8$ and $k_8,\dots,k_{14}=1$. All panels share the same color scale for readability. 
+
+This helps us to assess if all three models are producing ``similar" graphs. 
+\begin{itemize}
+    \item We are seeing a similar overall pattern in all 3. The brighter blocks to the top left (hub-to-hub pairs) paired with fading to dark in the bottom right (leaves). All models are pairing nodes $i,j$ in proportion to $k_i,k_j$, so high degree nodes frequently connect to each other, and low degree nodes rarely do. 
+    \item CM (multigraph) has a bright diagonal entry at $\langle A\rangle_{0,0}$ while Chung-Lu has none. Since self loops are permitted are only permitted in panel 1, we see the remaining diagonal entries form a 0 void across both CM (Simple) and Chung-Lu. 
+    \item CM (multigraph) also has some entries off the diagonal with color indicating frequency above 1, due to the presence of parallel edges. 
+    \item Chung-Lu collapses probabilities to 1 when they exceed it, guaranteeing the presence of certain edges, for example, $p_{0,1}=1$. In CM (simple), while that edge is frequently present, they are not always, accounting for the differences in panels 2 and 3. 
+    \item On average, the models largely agree except at the hubs themselves, where CM (multigraph) and Chung-Lu's capped probability each break expectations in a different way. In addition, the heatmaps only give means, and say nothing with regard to the variance of degree. For example, in CM (multigraph) every leaf has a degree of 1, whereas in Chung-Lu, some leaves end up as isolated nodes. 
+\end{itemize}
+
 \end{enumerate}
 \clearpage
 \section{}
