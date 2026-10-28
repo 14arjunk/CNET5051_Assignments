@@ -301,16 +301,27 @@ This is a brief 10,000 foot survey of the method, and I'm sure I have not unders
 \end{enumerate}
 \textit{I encourage you to read selectively; you want to understand how these algorithms work and where and how they could be used, but you don't need to understand every check for division by zero or the full literature review of how this approach has been used in MRI analysis and how detected neuronal communities differ from established medical literature. Read papers for what you need from them.}
 \response
-I chose five papers that build on one another, rather than five unrelated methods. Four of the five optimize modularity or a close variant, so the comparison is mostly about \emph{how} each one searches (local moves, eigenvectors, exact integer programming) and \emph{what} the null model is, with motif conductance as the one objective that is not modularity. Items (a)--(d) under each algorithm answer the four questions above.
 
-\paragraph{1. Leiden.}\footcite{traag2019leiden} Leiden is a refinement of Louvain, so it is close to the excluded methods. I include it anyway because it fixes a specific, demonstrated defect in Louvain, and because I plan to use it in my own project.
+I chose 5 papers that are related in some ways, rather than 5 classic unrelated methods. Four of the five optimize modularity or something closely related, so the comparison asked for in the questions mostly relies on how each one does so (local searches, integer programming, eigenvector optimization, etc.) There are also differences in what the null model is, departing from the normal CM. The final paper optimizes for motif conductance rather than modularity. This became a little long, but my short responses to each of the 4 subquestions are below each of the papers below:
 \begin{enumerate}
-    \item Either modularity with a resolution parameter $\gamma$ (higher $\gamma$ gives more, smaller communities), or the Constant Potts Model, $\mathcal{H} = \sum_c \bl e_c - \gamma \binom{n_c}{2} \br$, which compares the edges inside a community to a fixed density $\gamma$ rather than to a configuration-model expectation. CPM does not suffer from the resolution limit.
-    \item Leiden has three phases, repeated until nothing improves: (1) a \emph{fast} local moving phase, as in Louvain but only revisiting nodes whose neighbourhood changed; (2) a \emph{refinement} phase, where each community is reset to singletons and nodes are merged only within that community, only if they are well connected to it, and into a community chosen \emph{at random} among the moves that increase the quality (larger gains are more likely, with a randomness parameter $\theta$); (3) aggregation, built on the refined partition but starting from the unrefined one. The refinement step is what lets Leiden prove that every community is connected, which Louvain cannot do: in their experiments, Louvain left up to 25\% of communities badly connected and up to 16\% disconnected. Iterated, Leiden converges to a partition in which every subset of every community is locally optimally assigned.
-    \item 2019, \textit{Scientific Reports}. The authors are at the Centre for Science and Technology Studies (CWTS), Leiden University, a scientometrics group, which suggests its home is clustering citation and publication networks. The journal is broad and multidisciplinary, and the method is now the default in many software packages, so it is not obscure.
-    % TODO citation count
-    \item It is built for very large, sparse graphs: their largest test network (Web UK) has about 39 million nodes, and Leiden was 2--20 times faster than Louvain on real networks. Use it when you need a good partition of a big network quickly. Do not treat its output as \emph{the} optimum: it is still a heuristic, and different runs can differ because of the random refinement. With modularity it also inherits the resolution limit, so CPM is the safer choice when small communities matter, at the cost of having to choose $\gamma$.
+    \item \textbf{Leiden}\footcite{traag2019leiden}
+    \begin{itemize}
+        \item Leiden is an explicit refinement of Louvain, which we discussed in class. I included it anyway because it fixes a demonstrated flaw with the Louvain method, and because I plan to use it within my own project. 
+        \begin{enumerate}
+            \item Modularity with a resolution parameter $\gamma$ (higher $\gamma$ yields more communities), or the Constant Potts Model, which compares the edges within a community to some fixed density, rather than the configuration model expectation. CPM avoids resolution limit issues. 
+            \item There are three phases run until nothing improves. 
+            \begin{enumerate}
+                \item[\nc 1] A local moving phase, same as Louvain, except that we only revisit nodes whose neighborhood has changed while repeating. This finishes with a ``coarse" partition.
+                \item [\nc 2] A refinement phase, in which a second partitioning occurs. Nodes are kept as singletons and allowed to merge into partitions, but only \textit{within} the communities identified in the coarse partition. So each community in step 1 is now subdivided into multiple connected subcommunities. 
+                \item [\nc 3] The subcommunities from step (2) are the new super-nodes upon which to re-run the algorithm. The super nodes are grouped according to the coarse partition from step (1). 
+            \end{enumerate}
+            The refinement is what let Leiden guarantee connectivity of communitites, which Leiden can fail to ensure. In this paper's experiments, Leiden failed to ensure connectivity 16\% of the time. 
+            \item Published in \textit{Scientific Reports} 2019, the authors are all affiliated with Leiden University in Holland. The authors come from applied mathematics, econometrics, and CS/data science respectively, however all are associated with the Centre for Science and Technology Studies complex systems and scientometrics (science-of-science) group. The authors and journal point to broad, interdisciplinary potential, and the Leiden algorithm has been implemented in many software packages and libraries. It has been cited over 6747 times. 
+            \item It is built for very large, sparse (or ultra-sparse) graphs. On these applications, it can significantly out-perform Louvain while also reducing runtime greatly. Best application: need a good partition of a large network quickly. Does not guarantee in any way to be the optimum. Different runs can still be stuck in local maxima. Inherits issues of resolution limit if CPM is not used, although CPM comes with the added pressure of needing to chose a proper density to compare against. 
+        \end{enumerate}
+    \end{itemize}
 \end{enumerate}
+
 
 \paragraph{2. Spectral modularity maximization.}\footcite{newman2006modularity}
 \begin{enumerate}
