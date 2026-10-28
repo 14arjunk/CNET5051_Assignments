@@ -175,6 +175,12 @@ This helps us to assess if all three models are producing ``similar" graphs.
     \item Chung-Lu collapses probabilities to 1 when they exceed it, guaranteeing the presence of certain edges, for example, $p_{0,1}=1$. In CM (simple), while that edge is frequently present, they are not always, accounting for the differences in panels 2 and 3. 
     \item On average, the models largely agree except at the hubs themselves, where CM (multigraph) and Chung-Lu's capped probability each break expectations in a different way. In addition, the heatmaps only give means, and say nothing with regard to the variance of degree. For example, in CM (multigraph) every leaf has a degree of 1, whereas in Chung-Lu, some leaves end up as isolated nodes. 
 \end{itemize}
+\autoref{fig:isolated} and \autoref{fig:deg4} point out a simple metric (indicidence of nodes with a specified degree), one of which diverges and one of which is roughly similar. 
+
+We expect the number of nodes with degree 0 to diverge because the CM (multigraph) fixes every node's degree exactly, so nobody in this degree sequence (all degrees $\geq 1$) can end up isolated. Rarely, in CM (simple) a degree-2 node can pair its two stubs together into a self-loop that we then delete. Chung-Lu only matches degrees in expectation. Seven of the 15 nodes have degree 1, we expect to see them have no edge at all with a significant probability, so we should see a few isolated nodes in a typical Chung-Lu graph, which matches the plot. 
+
+We expect the number nodes with degree 4 to be broadly similar (around 1). In CM (multigraph), we always have exactly 1. In CM (simple) and Chung-Lu, some expected degree 3 nodes slide up to 4, and some expected degree 5 nodes slide down to 4, just as the single expected degree 4 node can also slide up or down. Overall, we see a rough balancing of around 80\% of realizations contain exactly 1 node of degree 4. 
+
 
 \end{enumerate}
 \clearpage
