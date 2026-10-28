@@ -239,9 +239,28 @@ for the data, in addition to the generic requested SNAP citations.
     \item When thinking about a useful $f(p_1,p_2)$ a few features immediately come to mind:
     \begin{enumerate}
         \item Different sized partitions: the function should be capable of comparing different numbers of communities (not merely check two different 6-partitions against one another).
+        \clearpage
         \item Normalized appropriately: to compare communities of varying sizes (or indeed graphs of varying sizes creater naturally larger communities). 
         \item Merge vs. split: while perhaps less critical, when comparing against a known ground truth, a sensitivity (perhaps by sign) for "badness" stemming from which type of error is useful. Merging two real communities into one (as we are doing with the research departments), is a different error from splitting a true community. 
     \end{enumerate}
+
+    After a brief literature search (Meila 2007, Danon et. al. 2005, Vinh et. al. 2010, Good \& Clauset 2010), I decided on variation of information (VI),\footcite{meila2007comparing} to compare two partitions $p_1$ and $p_2$ of the same nodes. This measures the information lost and gained in moving from one partition to the other:
+\begin{equation}
+    \mathrm{VI}(p_1,p_2) = H(p_1 \mid p_2) + H(p_2 \mid p_1) = H(p_1) + H(p_2) - 2\,I(p_1,p_2),
+\end{equation}
+where $$H(p) = -\sum_k \frac{n_k}{n}\log_2\frac{n_k}{n}$$ is the entropy of the community sizes and $I(p_1,p_2)$ is the mutual information of the joint distribution $P(k,k') = |C_k \cap C'_{k'}|/n$. This meets each of my desired features above. 
+\begin{enumerate}
+    \item It is built from the overlap table of the two partitions, so partitions with different numbers of communities pose no problem (for example 6 communities against 42 departments).
+    \item It depends only on the relative community sizes $n_k/n$, so values are comparable across graphs of different sizes; it is not confined to $[0,1]$, but instead is bounded by $\log_2 n$ and and by $2\log K^*$ if both partitions have at most $K^*$ communities. We can normalize by $\log_2n$ if we want a $[0,1]$ metric, at the cost of comparing graphs of different $n.$
+    \item Finally, when $p_1$ is a known ground truth $T$ and $p_2$ is the detected partition $C$, the two terms separate the two error types:
+\begin{equation}
+    \mathrm{VI}(T,C) = \underbrace{H(T \mid C)}_{\text{merging}} + \underbrace{H(C \mid T)}_{\text{splitting}},
+\end{equation}
+since $H(T \mid C)$ is large when a community mixes several true departments, and $H(C \mid T)$ is large when a department is spread over several communities.
+
+This is a brief 10,000 foot survey of the method, and I'm sure I have not understood it deeply, nor properly elucidated its weaknesses, but at the moment it appears to be well-suited. 
+\end{enumerate}
+
 \end{enumerate}
 
 \clearpage
