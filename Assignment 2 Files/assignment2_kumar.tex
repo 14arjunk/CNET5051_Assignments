@@ -236,7 +236,12 @@ for the data, in addition to the generic requested SNAP citations.
         \caption{Distribution of community sizes in original EU email network vs. null}
         \label{fig:communitysizeccdf}
     \end{figure}
-    \item 
+    \item When thinking about a useful $f(p_1,p_2)$ a few features immediately come to mind:
+    \begin{enumerate}
+        \item Different sized partitions: the function should be capable of comparing different numbers of communities (not merely check two different 6-partitions against one another).
+        \item Normalized appropriately: to compare communities of varying sizes (or indeed graphs of varying sizes creater naturally larger communities). 
+        \item Merge vs. split: while perhaps less critical, when comparing against a known ground truth, a sensitivity (perhaps by sign) for "badness" stemming from which type of error is useful. Merging two real communities into one (as we are doing with the research departments), is a different error from splitting a true community. 
+    \end{enumerate}
 \end{enumerate}
 
 \clearpage
