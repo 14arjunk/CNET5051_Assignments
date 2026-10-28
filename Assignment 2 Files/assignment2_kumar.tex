@@ -336,37 +336,57 @@ I chose 5 papers that are related in some ways, rather than 5 classic unrelated 
             \item Per split the cost is $O[(m+n)n]$, which is $O(n^2)$ for a sparse graph, and the whole algorithm is about $O(n^2 \log n)$ on sparse graphs. Newman says this is reasonable up to roughly 100,000 vertices: a 27,000 vertex collaboration network took about 20 minutes on 2006 hardware. This is much slower than Leiden, so best suited to small or medium networks. Inherits the resolution limit of modularity.
         \end{enumerate}
     \end{itemize}
-\end{enumerate}
-
-\paragraph{3. Spatial modularity.}\footcite{expert2011spatial} This paper's contribution is a new objective rather than a new search procedure, but I think the objective is the more interesting part.
-\begin{enumerate}
-    \item Modularity, with the configuration-model null replaced by a gravity model: $P^{\text{Spa}}_{ij} = N_i N_j f(d_{ij})$, where $N_i$ is the importance of node $i$ (population, or degree) and the deterrence function
-    \[ f(d) = \frac{\sum_{i,j \,:\, d_{ij}=d} A_{ij}}{\sum_{i,j \,:\, d_{ij}=d} N_iN_j} \]
-    is \emph{measured from the data} (distance-binned) rather than fitted to a chosen form. If $f$ is flat, standard Newman--Girvan modularity is recovered exactly. $Q_{\text{Spa}}$ therefore rewards pairs that are more connected than expected \emph{for their distance}, which removes the ``nearby things talk to each other'' effect.
-    \item The search is not new: both versions of modularity are optimized with an existing spectral method (Richardson, Mucha \& Porter 2009), and the signs of the leading eigenvector give a similar bipartition. In principle any modularity optimizer that accepts a custom null model could be used.
-    \item 2011, \textit{PNAS} (Applied Mathematics; keywords: complex networks, social systems). Two authors, Blondel and Lambiotte, are also Louvain authors. The applications are geography, mobility and communication networks.
-    % TODO citation count
-    \item It is for spatially embedded networks where distance strongly shapes who connects: transport, mobility, phone calls. On a Belgian phone network of 571 communes, standard modularity found 18 spatially compact blocks, while $Q_{\text{Spa}}$ found an almost perfect bipartition matching the Flemish/French language border, and placed Brussels with the French side even though it sits in Flanders. On synthetic benchmarks it beat standard modularity more as density increased. It needs node locations and a notion of node importance, and the distance binning is a choice the results can depend on (the authors check this in their SI). It is the wrong tool when you \emph{want} spatially compact regions, for example drawing administrative borders; standard modularity already finds those.
-\end{enumerate}
-
-\paragraph{4. Motif-based spectral clustering.}\footcite{benson2016higher}
-\begin{enumerate}
-    \item Not modularity. It minimizes \emph{motif conductance},
-    \[ \phi_M(S) = \frac{\text{cut}_M(S,\bar{S})}{\min\bl \text{vol}_M(S), \text{vol}_M(\bar{S}) \br}, \]
-    where $\text{cut}_M$ counts instances of a chosen motif $M$ (a triangle, a feed-forward loop, \ldots) that are split between $S$ and its complement, and $\text{vol}_M(S)$ counts motif-instance nodes inside $S$. A good cluster contains many whole motifs and cuts few. There is no null model: quality is a cut ratio, not a comparison to random expectation.
-    \item (1) Build a motif adjacency matrix $W_M$, where $(W_M)_{ij}$ is the number of instances of $M$ containing both $i$ and $j$; (2) order the nodes by the leading nontrivial eigenvector of the normalized Laplacian of $W_M$; (3) sweep through that ordering and keep the prefix set with the smallest motif conductance. A ``motif Cheeger inequality'' guarantees this is within a quadratic factor of optimal. This finds \emph{one} cluster (a bipartition); more clusters come from $k$-means on several eigenvectors or from recursive bipartitioning. Different motifs give different clusterings of the same graph.
-    \item 2016, \textit{Science}, a general-audience journal, but the authors are in computer science and computational mathematics (Stanford, Purdue), so its home is data mining and graph algorithms, with applications to biology and transportation. Not obscure. Incidentally, the same group's follow-up (Yin et al.\ 2017), local higher-order clustering, is one of the two papers SNAP cites for the email-Eu-core network I used in Question 2.
-    % TODO citation count
-    \item It handles directed, weighted and signed networks, which modularity handles awkwardly, and it is most useful when domain knowledge says which motif matters. Their examples: the bi-fan motif in the \textit{C.\ elegans} neuronal network picked out a 20-neuron cluster that controls nictation, and two-hop motifs in an airline network separated hub airports from geography, which an edge-based method conflated. It scales well: for triangles it handled networks with billions of edges (worst case $\Theta(m^{1.5})$, empirically about $\Theta(m^{1.2})$), and it handled motifs of up to 9 nodes on networks with hundreds of thousands of edges. I would not use it when there is no meaningful motif. I also suspect that in sparse, tree-like graphs with few motif instances, many nodes would be in no motif at all and so disconnected in $W_M$.
-\end{enumerate}
-
-\paragraph{5. Bayan.}\footcite{aref2024bayan}
-\begin{enumerate}
-    \item Modularity (with $\gamma$ adjustable), but maximized \emph{globally}: Bayan either returns a partition proven to be optimal, or one proven to be within a chosen optimality gap.
-    \item Modularity maximization is written as an integer program: a binary variable $x_{ij}$ for each pair says whether $i$ and $j$ are separated, and ``triangular'' constraints on node triples force same-community membership to be transitive. This is NP-hard, so Bayan uses branch-and-cut. The LP relaxation gives an upper bound (solved with the commercial solver Gurobi), and a fast heuristic partition (Combo) gives a lower bound. It then branches on a triple $(i,j,k)$ whose LP solution is fractional: in one branch all three share a community (handled by merging them into a supernode), and in the other at most one pair of them does. Branches are closed when their LP solution is integral, infeasible, or worse than the best partition found so far. When the best partition matches the upper bound, it is optimal. If you stop early on time or on a gap tolerance, you get the approximate version.
-    \item The preprint appeared in 2022 and was published in \textit{Physical Review E} in 2024. The authors are in mechanical and industrial engineering (operations research) at Toronto, applying optimization tools to a physics problem. It is very recent, so presumably much less cited than the others.
-    % TODO citation count
-    \item Small networks only: exact solutions up to about 3{,}000 edges in the largest connected component, and the authors say outright that it ``is not suitable for and does not scale to large-scale networks.'' The undirected email network from Question 2 (986 nodes, 16{,}064 edges) is already well past that. The authors argue that small networks are common in some fields, for example psychometric networks (most under 100 nodes) and surveyed offline social networks. In their benchmark comparison of 30 methods, Bayan had the highest average accuracy at recovering planted partitions, with Combo and Leiden next. I see it less as an everyday tool and more as a ground truth for checking heuristics on small graphs: the authors' earlier work found that popular heuristics, Leiden included, rarely return the true maximum-modularity partition.
+    \item \textbf{Spatial modularity}\footcite{expert2011spatial}
+    \begin{itemize}
+        \item This paper changes what modularity is compared against (the null model) rather than how the partition is searched for. In networks where nodes sit in physical space, the configuration model ignores that nearby nodes are far more likely to connect, so ordinary modularity tends to return spatially compact blocks. This entry tries to remove that effect.
+        \begin{enumerate}
+            \item Modularity, with the configuration model null replaced by a gravity model, $P_{ij} = N_i N_j f(d_{ij})$. Here $N_i$ is the importance of node $i$ (for example a city's population, or a person's degree), $d_{ij}$ is the distance between $i$ and $j$, and the ``deterrence function" $f(d)$ is the average of $A_{ij}/(N_iN_j)$ over all pairs at distance $d$. So $f$ is measured directly from the data (with distances binned) rather than fitted to an assumed form. A good partition groups pairs that are more connected than expected \textit{at that distance}. If $f$ is flat, standard modularity is recovered exactly.
+            \item The search itself is not new, the contribution is the objective.
+            \begin{enumerate}
+                \item[\nc 1] Measure $f(d)$ from the data: bin the node pairs by distance and average $A_{ij}/(N_iN_j)$ within each bin.
+                \item[\nc 2] Use $P_{ij}$ in place of the configuration model term $k_ik_j/2m$ in the modularity matrix, giving the spatial modularity $Q_{\text{Spa}}$.
+                \item[\nc 3] Maximize $Q_{\text{Spa}}$ with an existing spectral method (the paper cites Richardson, Mucha \& Porter 2009 for it).
+            \end{enumerate}
+            \item Published in \textit{PNAS} 2011, filed under Applied Mathematics. The authors are at Imperial College London, MIT, and UCLouvain, and two of them (Blondel and Lambiotte) are also authors of the Louvain algorithm. The motivating examples are physical and social networks embedded in space: transport, power grids, mobile phone and brain networks. It has been cited over XXXX times.
+            % TODO citation count
+            \item Best suited to spatially embedded networks where distance strongly shapes who connects. On a Belgian mobile phone network of 571 communes, standard modularity found 18 spatially compact modules, while $Q_{\text{Spa}}$ found 31 communities, dominated by an almost perfect bipartition that matched the Flemish/French language border. On synthetic benchmarks it outperformed standard modularity, increasingly so as link density grew. It needs node locations and a measure of node importance, and the distance binning is a choice (the authors explore its effect in their supplement). Because it deliberately discounts distance, it is the wrong tool if spatially compact regions are what you are looking for.
+        \end{enumerate}
+    \end{itemize}
+    \item \textbf{Motif-based spectral clustering}\footcite{benson2016higher}
+    \begin{itemize}
+        \item This is the one entry that does not use modularity. It clusters by higher-order structure: instead of asking which nodes share many \textit{edges}, it asks which nodes share many instances of a chosen motif (for example a triangle).
+        \begin{enumerate}
+            \item \textit{Motif conductance}, $\phi_M(S) = \text{cut}_M(S,\bar{S}) / \min[\text{vol}_M(S),\text{vol}_M(\bar{S})]$, where $S$ is a candidate cluster and $\bar{S}$ is everything else. Here $\text{cut}_M$ is the number of instances of motif $M$ with at least one node in $S$ and one in $\bar{S}$, and $\text{vol}_M(S)$ is the number of nodes in motif instances that sit in $S$. It generalizes ordinary conductance, and a good cluster is one whose nodes take part in many motif instances without those instances being cut. There is no null model.
+            \item Finding the exact minimizer is infeasible, so the method is spectral.
+            \begin{enumerate}
+                \item[\nc 1] Build the motif adjacency matrix $W_M$, where $(W_M)_{ij}$ is the number of instances of $M$ containing both $i$ and $j$.
+                \item[\nc 2] Compute a spectral ordering of the nodes from the normalized Laplacian built from $W_M$.
+                \item[\nc 3] Sweep along that ordering and keep the prefix set with the smallest motif conductance.
+            \end{enumerate}
+            A ``motif Cheeger inequality" guarantees the cluster found is at most a quadratic factor away from the optimum. This finds one cluster at a time. For several clusters, the authors suggest $k$-means on multiple eigenvectors or recursive bipartitioning. Different motifs give different clusterings of the same network.
+            \item Published in \textit{Science} 2016. The journal is general-audience, but the authors are in computer science and computational mathematics (Stanford and Purdue), and the worked examples are a neuronal network and a flight network, so it reads as graph mining aimed at network science broadly. The same group's follow-up on local higher-order clustering (Yin et al. 2017) is one of the papers SNAP cites for the email-Eu-core network used in Question 2.\footcite{yin2017local} It has been cited over XXXX times.
+            % TODO citation count
+            \item It works on directed, undirected, weighted, and signed networks, and is most useful when domain knowledge suggests which motif matters (the supplement also describes how to find which motifs organize a network). The paper's examples: the bi-fan motif in the \textit{C. elegans} neuronal network picked out a 20-neuron cluster involved in controlling nictation, and two-hop motifs in a flight network separated hub airports from geography, which an edge-based method conflated. It scales well: for triangles it handles networks with billions of edges, with worst-case cost $\Theta(m^{1.5})$ but about $\Theta(m^{1.2})$ measured on 16 real networks, and it can process motifs up to size 9 on networks with hundreds of thousands of edges. It is also easy to parallelize.
+        \end{enumerate}
+    \end{itemize}
+    \item \textbf{Bayan}\footcite{aref2024bayan}
+    \begin{itemize}
+        \item Bayan is the odd one out in that it is not a heuristic. It maximizes modularity exactly, or approximates the maximum with a guarantee, and the authors' argument is that the usual heuristics (Louvain, Leiden and others) rarely return an optimal partition.
+        \begin{enumerate}
+            \item Modularity (with an adjustable resolution $\gamma$), but maximized \textit{globally}. Bayan returns a partition proven to be optimal, or one proven to be within a user-chosen optimality gap of the optimum.
+            \item Modularity maximization is written as an integer program: a binary variable $x_{ij}$ for each pair of nodes says whether $i$ and $j$ are in different communities, and ``triangular" constraints on triples of nodes force the same-community relation to be transitive. This is NP-hard, so Bayan solves it with branch-and-cut.
+            \begin{enumerate}
+                \item[\nc 1] Drop the requirement that the variables be integers (an LP relaxation), solved with the commercial solver Gurobi. This gives an upper bound on the modularity.
+                \item[\nc 2] A fast heuristic partition (Combo) gives a lower bound.
+                \item[\nc 3] Branch on a triple of nodes whose LP solution violates the constraints: in one branch all three are in the same community (merged into a supernode), and in the other at least two of the three pairs are separated. Repeat the bounds on each branch.
+                \item[\nc 4] Close a branch when its LP solution becomes integer, infeasible, or worse than the best partition found so far.
+            \end{enumerate}
+            When the best partition found equals the upper bound, it is provably optimal. Stopping earlier, on a time limit or a gap tolerance, gives the approximate version.
+            \item The preprint appeared on arXiv in 2022 and the paper was published in \textit{Physical Review E} in 2024. This is a physics journal, but the authors are in industrial engineering and operations research (Toronto and Polytechnique Montréal), which fits an optimization-based approach to a physics-style problem. It has been cited over XXXX times.
+            % TODO citation count
+            \item Only for small networks. Exact solutions are possible up to about 3,000 edges in the largest connected component, and the authors state that it ``is not suitable for and does not scale to large-scale networks." The email network from Question 2 (16,064 edges) is well past that. They argue small networks are common in some fields, such as psychometric networks, where most have fewer than 100 nodes. Against 29 other methods, Bayan had the highest average AMI on the ABCD benchmark, followed by Combo and Leiden, and on average it was about 3.7 times faster than solving the same integer program directly with Gurobi. Best used on small networks, or as a check on how far a heuristic like Leiden is from the true optimum.
+        \end{enumerate}
+    \end{itemize}
 \end{enumerate}
 
 
