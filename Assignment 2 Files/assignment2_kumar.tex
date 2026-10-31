@@ -287,7 +287,7 @@ This is a brief 10,000 foot survey of the method, and I'm sure I have not unders
 \end{enumerate}
 \response
 \begin{enumerate}[label=(\roman*)]
-    \item See .ipynb. The graph starts from a single node, and each new node picks its target with weight $k_i^\alpha + 1$. I added an optional \texttt{m} argument (edges per new node, default 1) since the question doesn't fix it. With \texttt{m=1} every graph is a tree with $n-1$ edges, which keeps the degree comparison clean. For \texttt{m}$>1$ the targets are drawn without replacement so the graph stays simple.
+    \item See .ipynb. The graph starts from a single node, and each new node picks its target with weight $k_i^\alpha + 1$. I added an optional \texttt{m} argument (edges per new node, default 1) since the question doesn't fix it. With $m=1$ every graph is a tree with $n-1$ edges, which keeps the degree comparison straightforward. For $m>1$ the targets are drawn without replacement so the graph stays simple.
     \item See \autoref{fig:padegree}. To avoid reading too much into one realization, the degrees are pooled over 20 graphs per $\alpha$ (seeds $10,\dots,29$), and plotted as a CCDF on log-log axes so no binning choices are needed.
     \begin{figure}[ht!]
         \centering
