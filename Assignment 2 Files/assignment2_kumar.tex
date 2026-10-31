@@ -382,7 +382,7 @@ Each run returns a single split ($S$ and everything else). For several clusters,
                 \item[\nc 4] Close a branch when its LP solution becomes integer, infeasible, or worse than the best partition found so far.
             \end{enumerate}
             When the best partition found equals the upper bound, it is provably optimal. Stopping earlier, on a time limit or a gap tolerance, gives the approximate version.
-            \item The preprint appeared on arXiv in 2022 and the paper was published in \textit{Physical Review E} in 2024. This is a physics journal, but the authors are in industrial engineering and operations research (Toronto and Polytechnique Montréal), which fits an optimization-based approach to a physics-style problem. It has been cited 21 times, however it is also the newest paper by some margin. 
+            \item The preprint appeared on arXiv in 2022 and the paper was published in \textit{Physical Review E} in 2024. This is a physics journal, but the authors are in industrial engineering and operations research (UToronto and Polytechnique Montréal), which fits an optimization-based approach to a physics-style problem. It has been cited 21 times, however it is also the newest paper by some margin. 
             % TODO citation count
             \item Only for small networks. Exact solutions are possible up to about 3,000 edges in the largest connected component, and the authors state that it ``is not suitable for and does not scale to large-scale networks." The email network from Question 2, for example, is well past that. They argue small networks are common in some fields, such as psychometric networks, where most have fewer than 100 nodes. 
         \end{enumerate}
@@ -394,5 +394,18 @@ Each run returns a single split ($S$ and everything else). For several clusters,
 \section{}
 \textit{For every problem set this semester, there will be an opportunity to earn extra credit. Since this is a new(-ish) course, we are eager to receive genuine feedback on the material, pace, instruction style, etc.\ of the course so far. Please provide any feedback about the lectures in recent weeks and/or this assignment.}
 \response
+I'll endeavor to be more concise than last time. The course has been great so far, with genuinely my only nitpick being the pacing relative to 5050. I understand they are separate courses and that the two of you are not necessarily collaborating on pacing, but sometimes it is a little strange for me personally. 
 
+For example, I find community detection extremely interesting, one of the reasons I'm focusing my final paper in both courses on it. The brief overview of common algorithms in this class, and the class time on implementation was extremely informative and valuable in making progress on my project and putting together some information to discuss with Dr. Cortes. However, we didn't cover the topic properly until, I believe, 2 weeks later in 5050. After sitting down with some of the mathematics, doing a deeper dive into resolution limits and scaling, and actually understanding in a conceptual manner, I have a far better command of the topic. 
+
+In truth, that's the way I tend to learn best for all topics of the course, theoretically from a rigorous derivation, then expanded to the realities of computational complexity, implementation, approximation, etc. 
+
+Apart from such though, I've been enjoying the class and I'm genuinely excited about the form and scope of my final project. I have identified a few separate directions I want to continue pushing the project forward probably over the year:
+\begin{enumerate}
+    \item 5051 project: a comprehensive deep dive on Antofagasta as a case study, backed by Dr. Cortes and her work, serving as a testing lab for my ideas and strategies as well
+    \item 1st Collaboration with Dr. Cortés: Expand to several other Chilean cities, primarily focusing on differing levels of isolation (nearby population and distance to the next comuna) to observe if there is expansion in the selection market across administrative boundaries (Chillán, Temuco, Concepción, Puerto Montt, Puerto Varas, Puerto Natales, Iquique, Arica etc.)
+    \item 2nd Collaboration with Dr. Cortés: Investigate the differences in revealed markets between grade level pooled nodes and the impact of technical/vocational schools, combined with potential impacts of reforms to inclusion and \textit{prioritario}
+    \item 5050 project (still malleable): investigation of the properties of the entire national projection network (less null testing, less informed by actual ground truth reality--what is this network object?)
+    \item Percolation: time series analysis of the borders of high-information, high-income \textit{copago} markets with low-information, low-income markets, evidence of preference curves shifting over time?
+\end{enumerate}
 \end{document}
