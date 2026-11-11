@@ -82,7 +82,7 @@
 \begin{document}
 
 \textbf{Overall Instructions:}
-Due by Friday, Nov.~20th, 11:00pm EST. Please submit a .pdf of your answers via Canvas, including a url to your .ipynb notebook in a public GitHub repository.\footnote{Public Repo here \hyperref[]{}} Use the provided \LaTeX{} template for your submission. Please name your Canvas submission as Lastname.pdf, (\textit{e.g.}~Trujillo.pdf). If you need help with \LaTeX{} or GitHub, please visit during office hours or post questions to the Canvas. Include your code in a (well-documented, commented, clear) \texttt{assignment03.ipynb} file. Scores for the code-based questions below will be based on your written responses \textit{and} code.
+Due by Friday, Nov.~20th, 11:00pm EST. Please submit a .pdf of your answers via Canvas, including a url to your .ipynb notebook in a public GitHub repository.\footnote{Public Repo here \repourl} Use the provided \LaTeX{} template for your submission. Please name your Canvas submission as Lastname.pdf, (\textit{e.g.}~Trujillo.pdf). If you need help with \LaTeX{} or GitHub, please visit during office hours or post questions to the Canvas. Include your code in a (well-documented, commented, clear) \texttt{assignment03.ipynb} file. Scores for the code-based questions below will be based on your written responses \textit{and} code.
 
 \begin{problem}{1 (40 points)}
 
@@ -144,8 +144,8 @@ Prey are assumed to have an unlimited food supply (plenty of grass for the bunny
     \begin{tikzpicture}
         \SetDistanceScale{2.5}
         \SetVertexStyle{LineOpacity=0}
-        \Vertices[shape=circle,NoLabel=True,size=0.25]{kc_vert.csv}
-        \Edges[]{kc_edges.csv}
+        \Vertices[shape=circle,NoLabel=True,size=0.25]{givenfiles_CNET5051_Assignment3_2026/kc_vert.csv}
+        \Edges[]{givenfiles_CNET5051_Assignment3_2026/kc_edges.csv}
     \end{tikzpicture}
     \end{center}
 
@@ -163,7 +163,7 @@ def graphLotkeVolterra(G, x, y, alpha, beta, gamma, delta, T)
         This simulation runs for T time steps, and returns a list of the simulation state at each time step. You may return a list of networkx graphs, or a list of tuples representing predator and prey populations. Here is one example of species progression over time in the Karate club graph:
 
         \begin{center}
-            \includegraphics[width=0.9\linewidth]{kc_progression.pdf}
+            \includegraphics[width=0.9\linewidth]{givenfiles_CNET5051_Assignment3_2026/kc_progression.pdf}
         \end{center}
 
         If you need to adjust starting populations or your $\alpha, \beta, \gamma, \delta$ parameters to produce interesting results, do so. For example, if you find that all the predators quickly die without reproducing, you may need to increase $\beta$ or $\gamma$ or decrease $\delta$ a little.
