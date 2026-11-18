@@ -23,7 +23,8 @@
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
-    filecolor=magenta,      
+    citecolor=blue,
+    filecolor=magenta,
     urlcolor=blue,
 }
 \usepackage{enumitem}
@@ -68,6 +69,65 @@
 %
 % Okay the main setup is done, you can touch things below this point
 %
+
+%My shorthand and citation setup (from A1/A2 preamble)
+\newcommand{\Or}{\text{ or }}
+\newcommand{\AND}{\text{ and }}
+\newcommand{\Say}{\text{Say }}
+\newcommand{\Let}{\text{Let }}
+\newcommand{\For}{\text{ for }}
+\newcommand{\Forall}{\text{ for all }}
+\newcommand{\On}{\text{ on }}
+\newcommand{\Take}{\text{Take }}
+\newcommand{\From}{\text{From }}
+\newcommand{\Where}{\text{ where }}
+\newcommand{\Note}{\textbf{Note: }}
+\newcommand{\pl}{\left(}
+\newcommand{\pr}{\right)}
+\newcommand{\bl}{\left[}
+\newcommand{\br}{\right]}
+\newcommand{\Cl}{\left\{}
+\newcommand{\Cr}{\right\}}
+\newcommand{\mb}{\mathbb}
+\newcommand{\mc}{\mathcal}
+\newcommand{\Span}{\text{span}}
+\newcommand{\Range}{\text{range}}
+\newcommand{\Null}{\text{null}}
+\newcommand{\Sin}[1]{\sin(#1)}
+\newcommand{\Cos}[1]{\cos(#1)}
+\newcommand{\response}{\subsubsection*{Response}}
+\newcommand{\note}{\textbf{Note:\text{ }}}
+\newcommand{\contra}{$\rightarrow\leftarrow$}
+\newcommand{\resetal}{\setcounter{equation}{0}}
+\newcommand{\nc}[1]{(#1)}
+\newcommand{\Space}{\text{ }}
+\usetikzlibrary{arrows.meta, decorations.markings}
+\usepackage{mathdots}
+\usepackage{suppose}
+\usepackage{booktabs}
+\usepackage{nicematrix}
+\usepackage{dirtytalk}
+\usepackage{pdfpages}
+\usepackage{logicproof}
+\usepackage{etoolbox}
+\usepackage{arydshln}
+\makeatletter
+\renewcommand{\lp@start@proof@line}{%
+  \stepcounter{lp@line}%
+  (\arabic{lp@line})%
+  &%
+  \lp@continue@proof@line%
+}
+\makeatother
+\usepackage{mathrsfs}
+\usepackage{algpseudocode}
+\usepackage[backend=biber,
+style=verbose,dashed=false]{biblatex}
+\addbibresource{bib.bib}
+\defbibheading{bibliography}[\bibname]{%
+  \section*{\centering#1}%
+}
+\newcommand{\Ang}[1]{\left\langle #1 \right\rangle}
 
 %RepoURL
 \urldef{\repourl}\url{https://github.com/14arjunk/CNET5051_Assignments/tree/main/Assignment%203%20Files}
@@ -133,7 +193,23 @@ Prey are assumed to have an unlimited food supply (plenty of grass for the bunny
 \end{problem}
 
 \begin{solution}
-    Your solution here... 
+\begin{enumerate}
+    \item [] \begin{enumerate}
+        \item See \texttt{.ipnyb} in repo for code. Some code taken
+        from Sayama's scripts\footcite{sayama2015}. Most of his code 
+        is slower and uses a lot of global variables, unlike the approaches
+        we are taking in this class, but this is how I learned to think
+        about many of these models and I find some of the approaches useful. 
+        Function comments denote exact which scripts I have pulled from,
+        and those scripts are included in the repo as well. See \autoref{q1aLVplot} below.
+        \begin{figure}[ht!]
+            \centering
+            \includegraphics[width=0.85\linewidth]{figures/q1a_lotka_volterra.png}
+            \caption{Deterministic Lotka-Volterra prey ($p_1$) and predator ($p_2$) populations from $t=0$ to $t=100$}
+            \label{q1aLVplot}
+        \end{figure}
+    \end{enumerate}
+\end{enumerate}
 \end{solution}
 
 \begin{problem}{2 (40 points)}
