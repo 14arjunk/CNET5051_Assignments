@@ -191,7 +191,7 @@ Prey are assumed to have an unlimited food supply (plenty of grass for the bunny
 \end{enumerate}
 
 \end{problem}
-
+\clearpage
 \begin{solution}
 \begin{enumerate}
     \item [] \begin{enumerate}
@@ -201,13 +201,148 @@ Prey are assumed to have an unlimited food supply (plenty of grass for the bunny
         we are taking in this class, but this is how I learned to think
         about many of these models and I find some of the approaches useful. 
         Function comments denote exact which scripts I have pulled from,
-        and those scripts are included in the repo as well. See \autoref{q1aLVplot} below.
+        and those scripts are included in the repo as well. See \autoref{q1aLVplot} below
+        for the population plot using the parameters given in the question
+        matter. 
         \begin{figure}[ht!]
             \centering
             \includegraphics[width=0.85\linewidth]{figures/q1a_lotka_volterra.png}
             \caption{Deterministic Lotka-Volterra prey ($p_1$) and predator ($p_2$) populations from $t=0$ to $t=100$}
             \label{q1aLVplot}
         \end{figure}
+        \item I kept the 1.a starting populations, $p_1(0)=80$ and $p_2(0)=20$, and varied only
+        the rates. This gives the four outcomes in \autoref{q1bOutcomesTable}, plotted in
+        \autoref{q1bOutcomesPlot}.
+        \begin{table}[ht!]
+            \centering
+            \begin{tabular}{lcl}
+                \toprule
+                Outcome & $\pl \alpha, \beta, \gamma, \delta \pr$ & State by $t=100$ \\
+                \midrule
+                Total extinction & $\pl 0,\ 0.1,\ 0.2,\ 0.0025 \pr$ & $p_1 \to 0$, $p_2 \to 0$ \\
+                Unbounded prey & $\pl 0.1,\ 0.002,\ 0.2,\ 0 \pr$ & $p_1 = \infty$ (growing), $p_2 \to 0$ \\
+                Steady coexistence & $\pl 0.1,\ 0.005,\ 0.2,\ 0.0025 \pr$ & $\pl p_1, p_2 \pr = \pl 80, 20 \pr$ for all $t$ \\
+                Neutral cycles & $\pl 0.1,\ 0.002,\ 0.2,\ 0.0025 \pr$ & $p_1 \in [20, 150)$, $p_2 \in [20, 100)$ \\
+                \bottomrule
+            \end{tabular}
+            \caption{Outcomes of the Lotka-Volterra model from $\pl p_1(0), p_2(0) \pr = \pl 80, 20 \pr$}
+            \label{q1bOutcomesTable}
+        \end{table}
+        \begin{figure}[ht!]
+            \centering
+            \includegraphics[height=0.8\textheight]{figures/q1b_outcomes.png}
+            \caption{Population over time for each outcome in \autoref{q1bOutcomesTable}}
+            \label{q1bOutcomesPlot}
+        \end{figure}
+        \begin{itemize}
+            \item \textbf{Total extinction:} With $\alpha=0$ the prey cannot reproduce, so
+            $\dfrac{dp_1}{dt} = -\beta p_1 p_2 \le 0$. With heavy predation ($\beta=0.1$), the prey fall below one
+            animal extremely quickly. Then, the food term $\delta p_1$ can no longer
+            balance out predator deaths. The predators then starve quickly die off by $t \approx 15$. 
+            The prey actually level off at some small positive, rather than exactly $0$,
+            because the predators die before eating the last fraction of a bunny. In the real world, a fraction of a bunny is no
+            bunny so this is actually the $\pl 0, 0 \pr$ outcome. You can add that to a list of 
+            sentences I did not think I would be typing in grad school.
+            \item \textbf{Unbounded prey (predator extinction):} With $\delta=0$, eating prey never produces new
+            predators, so $\dfrac{dp_2}{dt} = -\gamma p_2$ and $p_2$ falls below one animal by
+            $t \approx 15$. The prey growth rate is always
+            positive and will be close to purely exponential growth as the predators vanish. This is not
+            a stable state, since there is no carrying capacity limit, $p_1 \to \infty$.
+            \item \textbf{Steady coexistence:} With $\beta = 0.005$, $\dfrac{\alpha}{\beta} = 20$ and $\dfrac{\gamma}{\delta} = 80$,
+            so the starting point is exactly the coexistence fixed point derived below in the Jacobian analysis. Both derivatives are zero
+            and the populations never change.
+            \item \textbf{Ongoing cycles:} The 1.a rates. Both species oscillate forever with a fixed amplitude,
+            and each predator peak trails a prey peak.
+        \end{itemize}
+
+        We can use Sayama's linear stability
+        analysis,\footcite{sayama2015} to prove these are the only outcomes of the model. Write the model as $\dfrac{dp_1}{dt} = F_1$ and $\dfrac{dp_2}{dt} = F_2$, with
+        \begin{align*}
+            F_1 &= \alpha p_1 - \beta p_1 p_2 = p_1 \pl \alpha - \beta p_2 \pr, \\
+            F_2 &= \delta p_1 p_2 - \gamma p_2 = p_2 \pl \delta p_1 - \gamma \pr.
+        \end{align*}
+        Setting $F_1 = F_2 = 0$,
+        \begin{align*}
+            F_1 &= p_1 \pl \alpha - \beta p_2 \pr = 0 && \Rightarrow \quad p_1 = 0 \Or p_2 = \dfrac{\alpha}{\beta}, \\
+            F_2 &= p_2 \pl \delta p_1 - \gamma \pr = 0 && \Rightarrow \quad p_2 = 0 \Or p_1 = \dfrac{\gamma}{\delta}.
+        \end{align*}
+        Both must hold at once. If $p_1 = 0$, then $F_2 = -\gamma p_2 = 0$ forces $p_2 = 0$. If instead
+        $p_2 = \dfrac{\alpha}{\beta} \neq 0$, then $F_2 = 0$ forces $p_1 = \dfrac{\gamma}{\delta}$. This gives two fixed points,
+        \begin{align*}
+            \pl p_1^*, p_2^* \pr = \pl 0, 0 \pr \qquad \text{and} \qquad
+            \pl p_1^*, p_2^* \pr = \pl \dfrac{\gamma}{\delta},\ \dfrac{\alpha}{\beta} \pr.
+        \end{align*}
+        Thus, the Jacobian is
+        \begin{equation*}
+            J = \begin{bmatrix}
+                \dfrac{\partial F_1}{\partial p_1} & \dfrac{\partial F_1}{\partial p_2} \\[10pt]
+                \dfrac{\partial F_2}{\partial p_1} & \dfrac{\partial F_2}{\partial p_2}
+            \end{bmatrix}
+            = \begin{bmatrix}
+                \alpha - \beta p_2 & -\beta p_1 \\
+                \delta p_2 & \delta p_1 - \gamma
+            \end{bmatrix}.
+        \end{equation*}
+        \begin{itemize}
+            \item At $\pl 0, 0 \pr$:
+            \begin{equation*}
+                J = \begin{bmatrix} \alpha & 0 \\ 0 & -\gamma \end{bmatrix},
+                \qquad \lambda_1 = \alpha > 0, \quad \lambda_2 = -\gamma < 0.
+            \end{equation*}
+            One eigenvalue is positive and one is negative, so the origin is an unstable saddle point. 
+            Along the $p_1$ axis, prey alone grow like $e^{\alpha t}$. Along the $p_2$ axis, predators alone die
+            like $e^{-\gamma t}$. A trajectory that starts with both populations positive can never reaches the
+            origin.
+            \item At $\pl \dfrac{\gamma}{\delta},\ \dfrac{\alpha}{\beta} \pr$:
+            \begin{equation*}
+                J = \begin{bmatrix} 0 & -\dfrac{\beta\gamma}{\delta} \\[4pt] \dfrac{\alpha\delta}{\beta} & 0 \end{bmatrix},
+                \qquad \det\pl J - \lambda I \pr = \lambda^2 + \alpha\gamma = 0
+                \quad \Rightarrow \quad \lambda = \pm i\sqrt{\alpha\gamma}.
+            \end{equation*}
+            The eigenvalues are purely imaginary, so the linearization is a center. Because
+            $\mathrm{Re}\,\lambda = 0$, linearization alone cannot tell us whether the full nonlinear system expands, contracts, or cycles. 
+        \end{itemize}
+        So, to settle the center case, we will use a Lyapunov function. The quantity
+        \begin{equation*}
+            V\pl p_1, p_2 \pr = \delta p_1 - \gamma \ln p_1 + \beta p_2 - \alpha \ln p_2
+        \end{equation*}
+        is conserved along every trajectory:
+        \begin{align*}
+            \dfrac{dV}{dt} &= \pl \delta - \dfrac{\gamma}{p_1} \pr \dfrac{dp_1}{dt} + \pl \beta - \dfrac{\alpha}{p_2} \pr \dfrac{dp_2}{dt} \\
+            &= \pl \delta - \dfrac{\gamma}{p_1} \pr p_1 \pl \alpha - \beta p_2 \pr + \pl \beta - \dfrac{\alpha}{p_2} \pr p_2 \pl \delta p_1 - \gamma \pr \\
+            &= \pl \delta p_1 - \gamma \pr \pl \alpha - \beta p_2 \pr + \pl \beta p_2 - \alpha \pr \pl \delta p_1 - \gamma \pr = 0.
+        \end{align*}
+        $V$ has its minimum at $\pl \dfrac{\gamma}{\delta},\ \dfrac{\alpha}{\beta} \pr$, and it goes to infinity whenever either
+        population goes to $0$ or to $\infty$. So every trajectory stays on one closed level curve of $V$ for all timesteps. Thus, we have two conclusions:
+        \begin{enumerate}
+            \item The coexistence scenario is Lyapunov stable but not asymptotically stable, so it will orbit that
+            start point, staying near, but never converging to it. It is neutrally stable.
+            \item Orbits can neither reach the axes nor escape to infinity.
+        \end{enumerate}
+        Hence, for $\alpha, \beta, \gamma, \delta > 0$ and $p_1(0), p_2(0) > 0$, the only possible outcomes are
+        steady coexistence (starting exactly at the fixed point) and neutral cycles (starting anywhere else). The
+        model has no attracting sink at all. Extinction or explosion zeroing a rate ($\alpha = 0$
+        or $\delta = 0$, as above) or starting with a population of zero: $p_2(0) = 0$ gives
+        $p_1 = p_1(0)e^{\alpha t}$, and $p_1(0) = 0$ gives $p_2 = p_2(0)e^{-\gamma t}$.
+
+        Finally, with the 1.a rates and
+        $\pl p_1(0), p_2(0) \pr = \pl 50, 50 \pr$ (\autoref{q1bVariedStart}), $p_2(0) = \dfrac{\alpha}{\beta} = 50$ makes
+        $\dfrac{dp_1}{dt} = 0$ at $t=0$, so the run starts at the bottom of a prey cycle. 
+        \autoref{q1bPhasePortrait} puts all 5 of these these phase patterns together in a single plane. The orbits are nested closed loops
+        around the center at $\pl 80, 50 \pr$, each a level curve of $V$, travelled counterclockwise, with the saddle at the origin.
+        \begin{figure}[ht!]
+            \centering
+            \includegraphics[width=0.85\linewidth]{figures/q1b_varied_start.png}
+            \caption{Lotka-Volterra populations from $\pl p_1(0), p_2(0) \pr = \pl 50, 50 \pr$ with the 1.a rates}
+            \label{q1bVariedStart}
+        \end{figure}
+        \begin{figure}[ht!]
+            \centering
+            \includegraphics[width=0.85\linewidth]{figures/q1b_phase_portrait.png}
+            \caption{Phase portrait for the 1.a rates: streamlines of the vector field, orbits from four starting points, and the two fixed points}
+            \label{q1bPhasePortrait}
+        \end{figure}
+        \clearpage
     \end{enumerate}
 \end{enumerate}
 \end{solution}
