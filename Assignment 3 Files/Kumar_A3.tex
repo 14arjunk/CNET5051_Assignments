@@ -505,18 +505,6 @@ G4 = nx.watts_strogatz_graph(1000, 2, 0.05)
         $x = 0.4$ and $y = 0.1$ as in the example above, and $\pl \alpha, \beta, \gamma, \delta \pr = \pl 0.5,\ 0.1,\ 0.1,\ 0.5 \pr$.
         The prey first fill most of the empty nodes, the predators then catch up, and after that the populations
         trade off noisily. With only 34 nodes, the details of a run depend a lot on the seed.
-        \begin{figure}[ht!]
-            \centering
-            \includegraphics[height=0.8\textheight]{figures/q2a_karate_snapshots.png}
-            \caption{Snapshots of the network Lotka-Volterra model on the karate club graph}
-            \label{q2aSnapshots}
-        \end{figure}
-        \begin{figure}[ht!]
-            \centering
-            \includegraphics[width=0.85\linewidth]{figures/q2a_karate_populations.png}
-            \caption{Prey, predator, and empty populations over time on the karate club graph}
-            \label{q2aPopulations}
-        \end{figure}
 
         \item See \texttt{.ipynb}. I built the four graphs as given, adding a seed to the random ones so they are
         reproducible. To compare them fairly, every graph starts with about a third prey, a third predators, and a
@@ -541,37 +529,6 @@ G4 = nx.watts_strogatz_graph(1000, 2, 0.05)
         The seed 10 runs above turn out to be typical. The grid is extremely consistent (SD under 1\%), ER almost
         always ends in total extinction (though in a few runs some predators are still alive at $t=100$), BA
         coexists with the widest spread, and WS ends with the prey taking over in every run.
-        \begin{figure}[ht!]
-            \centering
-            \begin{minipage}{0.49\linewidth}
-                \includegraphics[width=\linewidth]{figures/q2b_grid.png}
-            \end{minipage}\hfill
-            \begin{minipage}{0.49\linewidth}
-                \includegraphics[width=\linewidth]{figures/q2b_erdos_renyi.png}
-            \end{minipage}\\[6pt]
-            \begin{minipage}{0.49\linewidth}
-                \includegraphics[width=\linewidth]{figures/q2b_barabasi_albert.png}
-            \end{minipage}\hfill
-            \begin{minipage}{0.49\linewidth}
-                \includegraphics[width=\linewidth]{figures/q2b_watts_strogatz.png}
-            \end{minipage}
-            \caption{Populations over time on the four graphs (seed 10), $x = y = 0.33$}
-            \label{q2bPopulations}
-        \end{figure}
-        \begin{figure}[ht!]
-            \centering
-            \includegraphics[height=0.85\textheight]{figures/q2b_grid_snapshots.png}
-            \caption{Snapshots on the $100 \times 100$ grid (seed 10)}
-            \label{q2bGridSnapshots}
-        \end{figure}
-        \begin{figure}[ht!]
-            \centering
-            \includegraphics[height=0.8\textheight]{figures/q2b_erdos_renyi_snapshots.png}\hfill
-            \includegraphics[height=0.8\textheight]{figures/q2b_barabasi_albert_snapshots.png}\hfill
-            \includegraphics[height=0.8\textheight]{figures/q2b_watts_strogatz_snapshots.png}
-            \caption{Snapshots on (left to right) ER, BA, and WS (seed 10), nodes in index order on a $20 \times 50$ array, edges dropped for plotting}
-            \label{q2bArraySnapshots}
-        \end{figure}
         \begin{table}[ht!]
             \centering
             \begin{tabular}{llrrrr}
@@ -598,12 +555,6 @@ G4 = nx.watts_strogatz_graph(1000, 2, 0.05)
             \caption{Final populations at $t = 100$ (\% of nodes) over 100 runs per graph. Mode is the most common exact final value and SD is the sample standard deviation.}
             \label{q2bStatsTable}
         \end{table}
-        \begin{figure}[ht!]
-            \centering
-            \includegraphics[height=0.85\textheight]{figures/q2b_final_histograms.png}
-            \caption{Histograms of the final populations over 100 runs per graph}
-            \label{q2bHistograms}
-        \end{figure}
 
         \item In this model everything happens between direct neighbors: predators only eat prey right next to
         them, and prey only grow into empty neighbors. So what matters is how many neighbors a node has (its degree)
@@ -670,6 +621,57 @@ G4 = nx.watts_strogatz_graph(1000, 2, 0.05)
         extinction is permanent, so instead of neutral cycles we see the populations settle or die out. These
         conclusions are for one set of rates with $\beta$ fixed across graphs. Scaling $\beta$ by $\langle k \rangle$
         would be a natural next step to separate the effect of degree from the rest of the structure.
+        \clearpage
+        % all Question 2 figures are collected here, after the 2.c write-up
+        \begin{figure}[ht!]
+            \centering
+            \includegraphics[height=0.8\textheight]{figures/q2a_karate_snapshots.png}
+            \caption{Snapshots of the network Lotka-Volterra model on the karate club graph}
+            \label{q2aSnapshots}
+        \end{figure}
+        \begin{figure}[ht!]
+            \centering
+            \includegraphics[width=0.85\linewidth]{figures/q2a_karate_populations.png}
+            \caption{Prey, predator, and empty populations over time on the karate club graph}
+            \label{q2aPopulations}
+        \end{figure}
+        \begin{figure}[ht!]
+            \centering
+            \begin{minipage}{0.49\linewidth}
+                \includegraphics[width=\linewidth]{figures/q2b_grid.png}
+            \end{minipage}\hfill
+            \begin{minipage}{0.49\linewidth}
+                \includegraphics[width=\linewidth]{figures/q2b_erdos_renyi.png}
+            \end{minipage}\\[6pt]
+            \begin{minipage}{0.49\linewidth}
+                \includegraphics[width=\linewidth]{figures/q2b_barabasi_albert.png}
+            \end{minipage}\hfill
+            \begin{minipage}{0.49\linewidth}
+                \includegraphics[width=\linewidth]{figures/q2b_watts_strogatz.png}
+            \end{minipage}
+            \caption{Populations over time on the four graphs (seed 10), $x = y = 0.33$}
+            \label{q2bPopulations}
+        \end{figure}
+        \begin{figure}[ht!]
+            \centering
+            \includegraphics[height=0.85\textheight]{figures/q2b_grid_snapshots.png}
+            \caption{Snapshots on the $100 \times 100$ grid (seed 10)}
+            \label{q2bGridSnapshots}
+        \end{figure}
+        \begin{figure}[ht!]
+            \centering
+            \includegraphics[height=0.8\textheight]{figures/q2b_erdos_renyi_snapshots.png}\hfill
+            \includegraphics[height=0.8\textheight]{figures/q2b_barabasi_albert_snapshots.png}\hfill
+            \includegraphics[height=0.8\textheight]{figures/q2b_watts_strogatz_snapshots.png}
+            \caption{Snapshots on (left to right) ER, BA, and WS (seed 10), nodes in index order on a $20 \times 50$ array, edges dropped for plotting}
+            \label{q2bArraySnapshots}
+        \end{figure}
+        \begin{figure}[ht!]
+            \centering
+            \includegraphics[height=0.85\textheight]{figures/q2b_final_histograms.png}
+            \caption{Histograms of the final populations over 100 runs per graph}
+            \label{q2bHistograms}
+        \end{figure}
         \clearpage
     \end{enumerate}
 \end{enumerate}
